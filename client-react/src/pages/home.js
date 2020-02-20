@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import Grid from "@material-ui/core/Grid";
 import axios from "axios";
 
-import StockFeed from "../StockFeed";
+import StockFeed from "../components/StockFeed";
 
 export class home extends Component {
   state = {

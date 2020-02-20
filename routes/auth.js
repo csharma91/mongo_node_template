@@ -6,7 +6,7 @@ const { check, validationResult } = require("express-validator");
 const bcrypt = require("bcryptjs");
 
 // Auth Middleware
-const auth = require('../middleware/auth')
+const auth = require("../middleware/auth");
 
 const User = require("../models/User");
 
@@ -14,14 +14,13 @@ const User = require("../models/User");
 //@desc Get logged in User
 //@access Private
 
-router.get("/", auth,async(req, res) => {
+router.get("/", auth, async (req, res) => {
   try {
-      const user = await User.findById(req.user.id).select('-password')
-      res.json(user)
+    const user = await User.findById(req.user.id).select("-password");
+    res.json(user);
   } catch (error) {
-      console.error(err.message)
-      res.status(500).send('Server Error')
-      
+    console.error(err.message);
+    res.status(500).send("Server Error");
   }
 });
 
@@ -45,13 +44,17 @@ router.post(
       let user = await User.findOne({ email });
 
       if (!user) {
-        return res.status(400).json({ msg: "Invalid Credentials" });
+        return res
+          .status(400)
+          .json({ errors: [{ general: "Wrong credentials dude! Try Again" }] });
       }
 
       const isMatch = await bcrypt.compare(password, user.password);
 
       if (!isMatch) {
-        return res.status(400).json({ msg: "Invalid Credentials" });
+        return res
+          .status(400)
+          .json({ errors: [{ general: "Wrong credentials dude! Try Again" }] });
       }
 
       const payload = {
@@ -63,7 +66,7 @@ router.post(
         payload,
         config.get("jwtSecret"),
         {
-          expiresIn: 3600 // 1 Hour
+          expiresIn: 36000 // 1 Hour
         },
         (err, token) => {
           if (err) throw err;
@@ -71,8 +74,8 @@ router.post(
         }
       );
     } catch (err) {
-        console.error(err.message);
-        res.status(500).send("Server Error");
+      console.error(err.message);
+      res.status(500).send("Server Error");
     }
   }
 );
