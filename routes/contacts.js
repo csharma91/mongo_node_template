@@ -14,7 +14,7 @@ router.get('/', (req, res)=>{
 //@access Private
 
 router.post('/', (req, res)=>{
-    res.send ('Get all User Contacts')
+    res.send ('Post all User Contacts')
 })
 
 //@route PUT api/contacts/:id
