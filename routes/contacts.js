@@ -24,6 +24,23 @@ router.get("/", auth, async (req, res) => {
   }
 });
 
+//FOR TESTING ONLY
+//@route GET api/contacts/all
+//@desc Get all user contacts
+//@access Public
+
+router.get("/all", async (req, res) => {
+  try {
+    const contacts = await Contact.find({ user: '5e4df0d19ce22b6e76a5ccc4' }).sort({
+      date: -1
+    });
+    res.json(contacts);
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send("Server Error");
+  }
+});
+
 //@route POST api/contacts
 //@desc Get all user contacts
 //@access Private
