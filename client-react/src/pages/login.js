@@ -13,29 +13,9 @@ import { Typography } from "@material-ui/core";
 import { TextField } from "@material-ui/core";
 import { Button } from "@material-ui/core";
 
-const styles = {
-  form: {
-    textAlign: "center"
-  },
-  image: {
-    maxWidth: 75,
-    margin: "20px auto 20px auto"
-  },
-  pageTitle: {
-    margin: "10px auto 10px auto"
-  },
-  textfield: {
-    margin: "10px auto 10px auto"
-  },
-  button: {
-    margin: "20px auto 20px auto"
-  },
-  customError: {
-    color: "red",
-    fontSize: "0.8rem",
-    marginTop: 10
-  }
-};
+const styles = theme => ({
+  ...theme.spreadThis
+});
 
 export class login extends Component {
   constructor() {
@@ -61,6 +41,7 @@ export class login extends Component {
       .post("api/auth", userData)
       .then(res => {
         console.log(res.data);
+        localStorage.setItem("AuthToken", res.data.token);
         this.setState({
           loading: false
         });
