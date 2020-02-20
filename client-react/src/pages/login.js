@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { withStyles } from "@material-ui/core/styles";
 import PropTypes from "prop-types";
 
-import AppIcon from "../";
+import AppIcon from ".../images/Forex.png";
 
 //MUI Stuff
 import Grid from "@material-ui/core/Grid";

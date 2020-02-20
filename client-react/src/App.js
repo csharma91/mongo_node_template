@@ -3,16 +3,16 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import "./App.css";
 
 //MUI Stuff
-import MuiThemeProvider from "@material-ui/core/styles/MuiThemeProvider";
-import createMuiTheme from "@material-ui/core/styles/createMuiTheme";
+import { ThemeProvider as MuiThemeProvider } from "@material-ui/core/styles";
+import { createMuiTheme } from "@material-ui/core/styles";
 
 //Components
 import Navbar from "./components/Navbar";
 
 //Pages
-import home from "./components/pages/home";
-import login from "./components/pages/login";
-import signup from "./components/pages/signup";
+import home from "./pages/home";
+import login from "./pages/login";
+import signup from "./pages/signup";
 
 const theme = createMuiTheme({
   palette: {
@@ -29,7 +29,7 @@ const theme = createMuiTheme({
       contrastText: "#fff"
     }
   },
-  typography:{
+  typography: {
     useNextVarients: true
   }
 });
