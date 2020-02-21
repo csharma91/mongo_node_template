@@ -5,7 +5,10 @@ import PropTypes from "prop-types";
 import AppIcon from "../images/forex.png";
 import axios from "axios";
 
-// import AppIcon from "../images/Forex.png";
+// Redux stuff
+import { connect } from 'react-redux';
+import { loginUser } from '../redux/actions/userActions';
+
 
 //MUI Stuff
 import Grid from "@material-ui/core/Grid";
@@ -17,7 +20,7 @@ const styles = theme => ({
   ...theme.spreadThis
 });
 
-export class login extends Component {
+class login extends Component {
   constructor() {
     super();
     this.state = {
@@ -26,16 +29,19 @@ export class login extends Component {
       errors: {}
     };
   }
-
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.UI.errors) {
+      this.setState({ errors: nextProps.UI.errors });
+    }
+  }
   handleSubmit = event => {
     event.preventDefault();
-
     const userData = {
       email: this.state.email,
       password: this.state.password
     };
+    this.props.loginUser(userData, this.props.history);
   };
-
   handleChange = event => {
     this.setState({
       [event.target.name]: event.target.value
@@ -43,8 +49,11 @@ export class login extends Component {
   };
 
   render() {
-    const { classes } = this.props;
-    const { errors, loading } = this.state;
+    const {
+      classes,
+      UI: { loading }
+    } = this.props;
+    const { errors } = this.state;
     return (
       <Grid container className={classes.form}>
         <Grid item sm />
@@ -103,8 +112,23 @@ export class login extends Component {
     );
   }
 }
-
 login.propTypes = {
-  classes: PropTypes.object.isRequired
+  classes: PropTypes.object.isRequired,
+  loginUser: PropTypes.func.isRequired,
+  user: PropTypes.object.isRequired,
+  UI: PropTypes.object.isRequired
 };
-export default withStyles(styles)(login);
+
+const mapStateToProps = state => ({
+  user: state.user,
+  UI: state.UI
+});
+
+const mapActionsToProps = {
+  loginUser
+};
+
+export default connect(
+  mapStateToProps,
+  mapActionsToProps
+)(withStyles(styles)(login));

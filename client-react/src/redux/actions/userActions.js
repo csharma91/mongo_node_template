@@ -1,22 +1,25 @@
-import { SET_USER, SET_ERRORS, CLEAR_ERRORS, LOADING_UI } from "../types";
+import { SET_USER, SET_ERRORS, CLEAR_ERRORS, LOADING_UI, LOADING_USER } from "../types";
+import axios from 'axios'
 
-export const loginUser = userData => dispatch => {
+export const loginUser = (userData, history) => dispatch => {
   dispatch({ type: LOADING_UI });
 
   axios
     .post("api/auth", userData)
     .then(res => {
       const AuthToken = res.data.token;
+      localStorage.setItem('AuthToken', AuthToken)
       axios.defaults.headers.common["Authorization"] = AuthToken;
       dispatch(getUserData());
-      this.props.history.push("/");
+      dispatch({ type: CLEAR_ERRORS });
+      history.push("/");
     })
     .catch(err => {
       console.log(err.response.data);
       console.log(typeof err.response.data);
-      this.setState({
-        errors: err.response.data.errors[0],
-        loading: false
+      dispatch({
+        type: SET_ERRORS,
+        payload: err.response.data.errors[0]
       });
     });
 };
