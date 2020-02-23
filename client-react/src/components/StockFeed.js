@@ -8,6 +8,7 @@ import Card from "@material-ui/core/Card";
 import CardMedia from "@material-ui/core/CardMedia";
 import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
+
 const styles = {
   card: {
     diplay: "flex",
@@ -38,7 +39,10 @@ export class StockFeed extends Component {
         />
         <CardContent className={classes.content}>
           <Typography variant="h5">{title}</Typography>
+          <hr style={{ border: "none", margin: "0 0 10px 0" }} />
           <Typography variant="body2">{description}</Typography>
+
+          <hr style={{ border: "none", margin: "0 0 10px 0" }} />
 
           <Typography
             variant="body1"

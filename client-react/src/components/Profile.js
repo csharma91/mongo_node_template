@@ -75,7 +75,11 @@ class Profile extends Component {
     const {
       classes,
       user: {
-        credentials: { name, createdAt, imgUrl, bio, website, location },
+        name,
+        lastupdatedate,
+        bio,
+        stocks,
+        location,
         loading,
         authenticated
       }
@@ -84,8 +88,11 @@ class Profile extends Component {
       authenticated ? (
         <Paper className={classes.paper}>
           <div className={classes.profile}>
-            <div className="profile-image">
-              <img src={imgUrl} alt="profile" />
+            <div className="image-wrapper">
+              <img className = "profile-image"
+                src="https://storage.googleapis.com/afs-prod/media/media:63b9dfab17204b65854d60a8825f4c28/1000.jpeg"
+                alt="profile"
+              />
             </div>
             <hr />
             <div className="profile-details">
@@ -105,13 +112,13 @@ class Profile extends Component {
                   <LocationOn color="primary" /> <span>{location}</span>
                 </Fragment>
               )}
-
-              {website && (
+              <hr />
+              {stocks && (
                 <Fragment>
                   <LinkIcon color="primary" />
-                  <a href={website} target="_blank" rel="noopener noreferrer">
+                  <a href={stocks} target="_blank" rel="noopener noreferrer">
                     {" "}
-                    {website}
+                    {stocks}
                   </a>
                   <hr />
                 </Fragment>

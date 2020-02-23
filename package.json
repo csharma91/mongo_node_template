@@ -23,6 +23,7 @@
   },
   "homepage": "https://github.com/csharma91/mongo_node_template#readme",
   "dependencies": {
+    "@material-ui/icons": "^4.9.1",
     "bcryptjs": "^2.4.3",
     "config": "^3.2.5",
     "dayjs": "^1.8.20",

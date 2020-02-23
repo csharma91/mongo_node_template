@@ -32,14 +32,16 @@ export const loginUser = (userData, history) => dispatch => {
 export const getUserData = () => dispatch => {
   dispatch({ type: LOADING_USER });
   axios
-    .get("/api/stockfeed/all")
+    .get("/api/userprofile/test")
     .then(res => {
+      console.log(res.data[0])
       dispatch({
         type: SET_USER,
-        payload: res.data
+        payload: res.data[0]
       });
     })
     .catch(err => console.log(err));
+   
 };
 
 export const signupUser = (newUserData, history) => dispatch => {
