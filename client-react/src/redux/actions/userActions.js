@@ -10,7 +10,6 @@ import axios from "axios";
 
 export const loginUser = (userData, history) => dispatch => {
   dispatch({ type: LOADING_UI });
-
   axios
     .post("api/auth", userData)
     .then(res => {
@@ -31,17 +30,26 @@ export const loginUser = (userData, history) => dispatch => {
 
 export const getUserData = () => dispatch => {
   dispatch({ type: LOADING_USER });
+  const AuthToken = localStorage.getItem("AuthToken");
+  axios.defaults.headers.common["x-auth-token"] = AuthToken;
   axios
-    .get("/api/userprofile/test")
+    .get("/api/userprofile/")
     .then(res => {
-      console.log(res.data[0])
       dispatch({
         type: SET_USER,
         payload: res.data[0]
       });
     })
     .catch(err => console.log(err));
-   
+};
+
+export const editUserDetails = userDetails => dispatch => {
+  dispatch({ type: LOADING_USER });
+  const AuthToken = localStorage.getItem("AuthToken");
+  axios.defaults.headers.common["x-auth-token"] = AuthToken;
+  axios.post("/api/userprofile", userDetails).then(() => {
+    dispatch(getUserData());
+  });
 };
 
 export const signupUser = (newUserData, history) => dispatch => {
@@ -55,7 +63,7 @@ export const signupUser = (newUserData, history) => dispatch => {
       history.push("/");
     })
     .catch(err => {
-      console.log(err.response.data.errors[0])
+      console.log(err.response.data.errors[0]);
       dispatch({
         type: SET_ERRORS,
         payload: err.response.data.errors[0]

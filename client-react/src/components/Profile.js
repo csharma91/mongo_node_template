@@ -2,21 +2,25 @@ import React, { Component, Fragment } from "react";
 import PropTypes from "prop-types";
 import withStyles from "@material-ui/core/styles/withStyles";
 import { Link } from "react-router-dom";
+import EditDetails from "./EditDetails";
 
 // MUI stuff
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import MuiLink from "@material-ui/core/Link";
 import Paper from "@material-ui/core/Paper";
+import { Tooltip, Icon, IconButton } from "@material-ui/core";
+
 // Icons
 import LocationOn from "@material-ui/icons/LocationOn";
 import LinkIcon from "@material-ui/icons/Link";
 import CalendarToday from "@material-ui/icons/CalendarToday";
 import EditIcon from "@material-ui/icons/Edit";
 import KeyboardReturn from "@material-ui/icons/KeyboardReturn";
+
 //Redux
 import { connect } from "react-redux";
-// import { logoutUser, uploadImage } from "../../redux/actions/userActions";
+import { logoutUser } from "../redux/actions/userActions";
 
 // const styles = theme => ({
 //   ...theme.spreadThis
@@ -71,6 +75,10 @@ const styles = theme => ({
 });
 
 class Profile extends Component {
+  handleLogout = () => {
+    this.props.logoutUser();
+  };
+
   render() {
     const {
       classes,
@@ -89,7 +97,8 @@ class Profile extends Component {
         <Paper className={classes.paper}>
           <div className={classes.profile}>
             <div className="image-wrapper">
-              <img className = "profile-image"
+              <img
+                className="profile-image"
                 src="https://storage.googleapis.com/afs-prod/media/media:63b9dfab17204b65854d60a8825f4c28/1000.jpeg"
                 alt="profile"
               />
@@ -126,6 +135,12 @@ class Profile extends Component {
               {/* <CalendarToday color="primary" />{' '}
               <span>Joined {dayjs(createdAt).format('MMM YYYY')}</span> */}
             </div>
+            <Tooltip title="LogOut" placement="top">
+              <IconButton onClick={this.handleLogout}>
+                <KeyboardReturn color="primary" />
+              </IconButton>
+            </Tooltip>
+            <EditDetails />
           </div>
         </Paper>
       ) : (
@@ -164,13 +179,16 @@ const mapStateToProps = state => ({
   user: state.user
 });
 
-// const mapActionsToProps = { logoutUser, uploadImage };
+const mapActionsToProps = { logoutUser };
 
 Profile.propTypes = {
-  //   logoutUser: PropTypes.func.isRequired,
+  logoutUser: PropTypes.func.isRequired,
   //   uploadImage: PropTypes.func.isRequired,
   user: PropTypes.object.isRequired,
   classes: PropTypes.object.isRequired
 };
 
-export default connect(mapStateToProps)(withStyles(styles)(Profile));
+export default connect(
+  mapStateToProps,
+  mapActionsToProps
+)(withStyles(styles)(Profile));
