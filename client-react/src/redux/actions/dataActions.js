@@ -22,6 +22,7 @@ export const getStockfeeds = () => dispatch => {
   axios
     .get("/api/stockfeed")
     .then(res => {
+      console.log(res);
       dispatch({
         type: SET_STOCKFEEDS,
         payload: res.data

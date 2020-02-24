@@ -27,7 +27,17 @@ export class StockFeed extends Component {
   render() {
     const {
       classes,
-      stockfeed: { author, source, title, description, date, url, urlToImage }
+      stockfeed: {
+        author,
+        title,
+        body,
+        companyTags,
+        likeCount,
+        commentCount,
+        url,
+        urlToImage,
+        date
+      }
     } = this.props;
 
     return (
@@ -40,7 +50,7 @@ export class StockFeed extends Component {
         <CardContent className={classes.content}>
           <Typography variant="h5">{title}</Typography>
           <hr style={{ border: "none", margin: "0 0 10px 0" }} />
-          <Typography variant="body2">{description}</Typography>
+          <Typography variant="body2">{body}</Typography>
 
           <hr style={{ border: "none", margin: "0 0 10px 0" }} />
 

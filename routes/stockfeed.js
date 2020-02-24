@@ -24,19 +24,19 @@ router.get("/", auth, async (req, res) => {
   }
 });
 
-//FOR TESTING ONLY
-//@route GET api/stockfeed/all
-//@desc Get all user stockfeed
-//@access Public
+//@route GET api/stockfeeds/:id
+//@desc Get Stockfeed by ID
+//@access Private
 
-router.get("/all", async (req, res) => {
+router.get("/:id", auth, async (req, res) => {
   try {
-    const stockfeeds = await StockFeed.find({
-      user: "5e4e03862dcd6172b1664525"
-    }).sort({
-      date: -1
-    });
-    res.json(stockfeeds);
+    let stockfeed = await StockFeed.findById(req.params.id);
+    if (!stockfeed) return res.status(404).json({ msg: "Stockfeed not Found" });
+    res.json(stockfeed);
+    // Make Sure User owns Stockfeed
+    if (stockfeed.user.toString() != req.user.id) {
+      return res.status(401).json({ msg: "Not Authorized" });
+    }
   } catch (error) {
     console.error(error.message);
     res.status(500).send("Server Error");
@@ -65,21 +65,24 @@ router.post(
     const {
       author,
       title,
-      description,
+      body,
+      companyTags,
+      likeCount,
+      commentCount,
       url,
       urlToImage,
-      source,
-      date
+      user
     } = req.body;
     try {
       const newStockFeed = new StockFeed({
         author,
         title,
-        description,
+        body,
+        companyTags,
+        likeCount,
+        commentCount,
         url,
         urlToImage,
-        source,
-        date,
         user: req.user.id
       });
       const stockfeed = await newStockFeed.save();
