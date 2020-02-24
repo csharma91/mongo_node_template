@@ -150,8 +150,7 @@ class EditDetails extends Component {
 const mapStateToProps = state => ({
   user: state.user
 });
-//   console.log(state.user),
-//   console.log("test")
+
 const mapActionsToProps = { editUserDetails };
 
 EditDetails.propTypes = {

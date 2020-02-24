@@ -111,7 +111,7 @@ class Profile extends Component {
                 color="primary"
                 variant="h5"
               >
-                @{name}
+                {name}
               </MuiLink>
               <hr />
               {bio && <Typography variant="body2">{bio}</Typography>}

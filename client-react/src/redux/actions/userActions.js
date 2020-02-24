@@ -74,6 +74,8 @@ export const signupUser = (newUserData, history) => dispatch => {
 export const logoutUser = () => dispatch => {
   localStorage.removeItem("AuthToken");
   delete axios.defaults.headers.common["Authorization"];
+  // window.location.reload();
+  window.location.replace("/");
   dispatch({ type: SET_UNAUTHENTICATED });
 };
 

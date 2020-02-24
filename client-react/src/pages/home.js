@@ -1,28 +1,22 @@
 import React, { Component } from "react";
 import Grid from "@material-ui/core/Grid";
 import axios from "axios";
+import PropTypes from "prop-types";
 
 import StockFeed from "../components/StockFeed";
 import Profile from "../components/Profile";
 
+import { connect } from "react-redux";
+import { getStockfeeds } from "../redux/actions/dataActions";
+
 export class home extends Component {
-  state = {
-    stockfeeds: null
-  };
   componentDidMount() {
-    axios
-      .get("/api/stockfeed/all")
-      .then(res => {
-        console.log(res.data);
-        this.setState({
-          stockfeeds: res.data
-        });
-      })
-      .catch(err => console.log(err));
+    this.props.getStockfeeds();
   }
   render() {
-    let recentContactMarkUp = this.state.stockfeeds ? (
-      this.state.stockfeeds.map(stockfeed => (
+    const { stockfeeds, loading } = this.props.data;
+    let recentContactMarkUp = !loading ? (
+      stockfeeds.map(stockfeed => (
         <StockFeed key={stockfeed.title} stockfeed={stockfeed} />
       ))
     ) : (
@@ -42,4 +36,12 @@ export class home extends Component {
   }
 }
 
-export default home;
+home.propTypes = {
+  getStockfeeds: PropTypes.func.isRequired,
+  data: PropTypes.object.isRequired
+};
+
+const mapStateToProps = state => ({
+  data: state.data
+});
+export default connect(mapStateToProps, { getStockfeeds })(home);

@@ -11,7 +11,9 @@ import {
 const initialState = {
   authenticated: false,
   loading: false,
-  credentials: {},
+  name: "",
+  bio: "",
+  stock: "",
   like: [],
   notifications: []
 };
@@ -23,8 +25,10 @@ export default function(state = initialState, action) {
         ...state,
         authenticated: true
       };
+
     case SET_UNAUTHENTICATED:
       return initialState;
+
     case SET_USER:
       return {
         authenticated: true,
