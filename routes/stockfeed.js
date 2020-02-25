@@ -116,7 +116,8 @@ router.get("/:id/like", auth, async (req, res) => {
     stockfeedId: req.params.id.toString()
   });
 
-  if (likecheck_feed_id.length !== 0 && likecheck_user.length !== 0) {
+  if (1 === 2) {
+    // if (likecheck_feed_id.length !== 0 && likecheck_user.length !== 0) {
     return res.status(404).json({ msg: "You cannot like twice son" });
   } else {
     try {

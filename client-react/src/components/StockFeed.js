@@ -36,9 +36,11 @@ const styles = {
 
 export class StockFeed extends Component {
   likedStockfeed = () => {
+    console.log("Like Test");
+    console.log(this.props.user.likes);
     if (
-      this.props.user.likeCount &&
-      this.props.user.likes.find(like => like.id === this.props.stockfeed.id)
+      this.props.user.likes &&
+      this.props.user.likes.find(like => like._id === this.props.stockfeed._id)
     )
       return true;
     else return false;
@@ -46,10 +48,12 @@ export class StockFeed extends Component {
 
   likeStockfeed = () => {
     this.props.likeStockfeed(this.props.stockfeed._id);
+    console.log("like");
   };
 
   unlikeStockfeed = () => {
     this.props.unlikeStockfeed(this.props.stockfeed._id);
+    console.log("unlike");
   };
   render() {
     const {

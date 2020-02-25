@@ -2,7 +2,8 @@ import {
   SET_STOCKFEEDS,
   LIKE_STOCKFEED,
   UNLIKE_STOCKFEED,
-  LOADING_DATA
+  LOADING_DATA,
+  POST_STOCKFEED
 } from "../types";
 
 const initialState = {
@@ -28,11 +29,16 @@ export default function(state = initialState, actions) {
       let index = state.stockfeeds.findIndex(
         stockfeed => stockfeed.id === actions.payload.id
       );
-      console.log("LIKE");
+      console.log("LIKE33");
       console.log(index);
       state.stockfeed[index] = actions.payload;
       return {
         ...state
+      };
+    case POST_STOCKFEED:
+      return {
+        ...state,
+        stockfeeds: [actions.payload, ...state.stockfeeds]
       };
     default:
       return state;
