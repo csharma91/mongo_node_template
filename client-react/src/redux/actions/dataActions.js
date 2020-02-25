@@ -36,6 +36,27 @@ export const getStockfeeds = () => dispatch => {
     });
 };
 
+//Like a Stockfeed
+export const likeStockfeed = stockfeedId => dispatch => {
+  axios.get(`/api/stockfeed/${stockfeedId}/like`).then(res => {
+    console.log(res.data);
+    dispatch({
+      type: LIKE_STOCKFEED,
+      payload: res.data
+    }).catch(err => console.log(err));
+  });
+};
+
+//Unlike a Stockfeed
+export const unlikeStockfeed = stockfeedId => dispatch => {
+  axios.get(`/api/stockfeed/${stockfeedId}/unlike`).then(res => {
+    dispatch({
+      type: UNLIKE_STOCKFEED,
+      payload: res.data
+    }).catch(err => console.log(err));
+  });
+};
+
 export const clearErrors = () => dispatch => {
   dispatch({ type: CLEAR_ERRORS });
 };

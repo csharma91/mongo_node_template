@@ -7,6 +7,7 @@ const User = require("../models/User");
 const auth = require("../middleware/auth");
 
 const StockFeed = require("../models/StockFeed");
+const StockFeedLikes = require("../models/StockFeedLikes");
 
 //@route GET api/stockfeeds
 //@desc Get all user stockfeeds
@@ -93,6 +94,101 @@ router.post(
     }
   }
 );
+
+//@route GET api/stockfeeds/:id/like  == :id = stockfeedId/
+// Exmaple User ID test = 5e4f832ad3438a9081ee75dd
+//                 test2 = 5e536cc10c1275a3169cb4e7
+
+//req.user is Authenticated User
+//req.params.id is the stockfeed ID
+
+router.get("/:id/like", auth, async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
+  // Logic for Like - only single user
+  let likecheck_user = await StockFeedLikes.find({
+    user: req.user.id.toString()
+  });
+  let likecheck_feed_id = await StockFeedLikes.find({
+    stockfeedId: req.params.id.toString()
+  });
+
+  if (likecheck_feed_id.length !== 0 && likecheck_user.length !== 0) {
+    return res.status(404).json({ msg: "You cannot like twice son" });
+  } else {
+    try {
+      // Add Record to StockFeedLike Table
+      const newStockFeedLike = new StockFeedLikes({
+        name: req.user.name,
+        stockfeedId: req.params.id.toString(),
+        user: req.user.id.toString()
+      });
+      const stockfeedLike = await newStockFeedLike.save();
+      res.json(stockfeedLike);
+
+      // Increament Like Count in Stockfeeds Table
+      let stockfeed = await StockFeed.find({ _id: req.params.id });
+      let newLikeCount = stockfeed[0];
+      newLikeCount.likeCount = stockfeed[0].likeCount + 1;
+      newstockfeed = await StockFeed.findByIdAndUpdate(
+        req.params.id,
+        { $set: newLikeCount },
+        { new: true }
+      );
+      // res.json(newLikeCount.likeCount);
+    } catch (err) {
+      console.error(err.message);
+      res.status(500).send("Server Error");
+    }
+  }
+});
+
+//@route GET api/stockfeeds/:id/unlike  == :id = stockfeedId/
+// Exmaple User ID test = 5e4f832ad3438a9081ee75dd
+//                 test2 = 5e536cc10c1275a3169cb4e7
+
+//req.user is Authenticated User
+//req.params.id is the stockfeed ID
+
+router.get("/:id/unlike", auth, async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
+  // Logic for Like - only single user
+  let likecheck_user = await StockFeedLikes.find({
+    user: req.user.id.toString()
+  });
+  let likecheck_feed_id = await StockFeedLikes.find({
+    stockfeedId: req.params.id.toString()
+  });
+
+  try {
+    if (likecheck_feed_id.length !== 0 && likecheck_user.length !== 0) {
+      let stockfeed = await StockFeed.find({ _id: req.params.id });
+      let newLikeCount = stockfeed[0];
+      newLikeCount.likeCount = stockfeed[0].likeCount - 1;
+      newstockfeed = await StockFeed.findByIdAndUpdate(
+        req.params.id,
+        { $set: newLikeCount },
+        { new: true }
+      );
+      newstockfeed_unlike = await StockFeedLikes.findByIdAndDelete(
+        req.params.id
+      );
+      return res.status(200).json({ msg: "Unlike Successfull" });
+    } else {
+      return res.status(404).json({ msg: "You cannot unlike this." });
+    }
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server Error");
+  }
+});
 
 //@route PUT api/contacts/:id
 //@desc Update Contact

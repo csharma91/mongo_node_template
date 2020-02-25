@@ -5,7 +5,9 @@ import {
   LOADING_UI,
   SET_AUTHENTICATED,
   SET_UNAUTHENTICATED,
-  LOADING_USER
+  LOADING_USER,
+  LIKE_STOCKFEED,
+  UNLIKE_STOCKFEED
 } from "../types";
 
 const initialState = {
@@ -14,7 +16,7 @@ const initialState = {
   name: "",
   bio: "",
   stock: "",
-  like: [],
+  likes: [],
   notifications: []
 };
 
@@ -39,6 +41,24 @@ export default function(state = initialState, action) {
       return {
         ...state,
         loading: true
+      };
+
+    case LIKE_STOCKFEED:
+      return {
+        ...state,
+        likes: [
+          ...state.likes,
+          {
+            name: state.name,
+            id: action.payload.id
+          }
+        ]
+      };
+
+    case UNLIKE_STOCKFEED:
+      return {
+        ...state,
+        likes: state.likes.filter(like => like.id !== action.payload.id)
       };
     default:
       return state;

@@ -16,8 +16,14 @@ app.get("/", (req, res) => res.json({ msg: "Welcome to the App" }));
 app.use("/api/users", require("./routes/users"));
 app.use("/api/auth", require("./routes/auth"));
 app.use("/api/contacts", require("./routes/contacts"));
+
 app.use("/api/stockfeed", require("./routes/stockfeed"));
-app.use("/api/userprofile", require("./routes/userprofile"))
+
+// app.use("/api/stockfeed/:id/like", require("./routes/stockfeed"));
+// app.use("/api/stockfeed/:id/unlike", require("./routes/stockfeed"));
+// app.use("/api/stockfeed/:id/comment", require("./routes/stockfeed"));
+
+app.use("/api/userprofile", require("./routes/userprofile"));
 
 const PORT = process.env.PORT || 5000;
 

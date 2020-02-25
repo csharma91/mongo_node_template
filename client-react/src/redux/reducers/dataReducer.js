@@ -23,6 +23,17 @@ export default function(state = initialState, actions) {
         stockfeeds: actions.payload,
         loading: false
       };
+    case LIKE_STOCKFEED:
+    case UNLIKE_STOCKFEED:
+      let index = state.stockfeeds.findIndex(
+        stockfeed => stockfeed.id === actions.payload.id
+      );
+      console.log("LIKE");
+      console.log(index);
+      state.stockfeed[index] = actions.payload;
+      return {
+        ...state
+      };
     default:
       return state;
   }
