@@ -37,10 +37,11 @@ const styles = {
 export class StockFeed extends Component {
   likedStockfeed = () => {
     console.log("Like Test");
-    console.log(this.props.user.likes);
     if (
-      this.props.user.likes &&
-      this.props.user.likes.find(like => like._id === this.props.stockfeed._id)
+      this.props.stockfeed.likes &&
+      this.props.stockfeed.likes.find(
+        like => like.user === this.props.stockfeed.user
+      )
     )
       return true;
     else return false;
@@ -64,14 +65,17 @@ export class StockFeed extends Component {
         title,
         body,
         companyTags,
-        likeCount,
-        commentCount,
+        likes,
+        comments,
         url,
         urlToImage,
         date
       },
       user: { authenticated }
     } = this.props;
+
+    const likeCount = likes.length;
+    const commentCount = comments.length;
 
     const likeButton = !authenticated ? (
       <MyButton top="Like">
@@ -114,10 +118,6 @@ export class StockFeed extends Component {
 
           <Typography variant="body2" color="textSecondary">
             <RelativeTime value={date} />
-          </Typography>
-
-          <Typography variant="body2" color="textSecondary">
-            {_id}
           </Typography>
 
           {likeButton}

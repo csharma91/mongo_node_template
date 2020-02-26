@@ -1,13 +1,22 @@
 import React, { Component } from "react";
 import Grid from "@material-ui/core/Grid";
-import axios from "axios";
 import PropTypes from "prop-types";
+import withStyles from "@material-ui/core/styles/withStyles";
 
 import StockFeed from "../components/StockFeed";
 import Profile from "../components/Profile";
+import StockList from "../components/StockList";
 
+// MUI Stuff
+import Typography from "@material-ui/core/Typography";
+
+//Redux Stuff
 import { connect } from "react-redux";
 import { getStockfeeds } from "../redux/actions/dataActions";
+
+const styles = theme => ({
+  ...theme.spreadThis
+});
 
 export class home extends Component {
   componentDidMount() {
@@ -30,6 +39,26 @@ export class home extends Component {
         <Grid item sm={4} xs={12}>
           {/* <p>Profile....</p> */}
           <Profile />
+          <hr style={{ border: "none", margin: "0 0 20px 0" }} />
+          <Typography variant="h6" align="center">
+            {"Your Stock List"}
+          </Typography>
+          <hr style={{ border: "none", margin: "0 0 10px 0" }} />
+          <StockList />
+
+          <hr style={{ border: "none", margin: "0 0 20px 0" }} />
+          <Typography variant="h6" align="center">
+            {"Your News"}
+          </Typography>
+          <hr style={{ border: "none", margin: "0 0 10px 0" }} />
+          <StockList />
+
+          <hr style={{ border: "none", margin: "0 0 20px 0" }} />
+          <Typography variant="h6" align="center">
+            {"People"}
+          </Typography>
+          <hr style={{ border: "none", margin: "0 0 10px 0" }} />
+          <StockList />
         </Grid>
       </Grid>
     );
@@ -44,4 +73,6 @@ home.propTypes = {
 const mapStateToProps = state => ({
   data: state.data
 });
-export default connect(mapStateToProps, { getStockfeeds })(home);
+export default connect(mapStateToProps, { getStockfeeds })(
+  withStyles(styles)(home)
+);

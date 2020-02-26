@@ -8,16 +8,21 @@ const UserSchema = mongoose.Schema({
   bio: {
     type: String
   },
-  location: {
+  title: {
     type: String
   },
   stocks: {
-    type: String
+    type: [String]
   },
   newssource: {
-    type: String
+    type: [String]
   },
-
+  altsource: {
+    type: [String]
+  },
+  region: {
+    type: [String]
+  },
   lastupdatedate: {
     type: Date,
     default: Date.now
@@ -25,6 +30,9 @@ const UserSchema = mongoose.Schema({
   user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "users"
+  },
+  avatar: {
+    type: String
   }
 });
 

@@ -36,6 +36,7 @@ class PostStockFeed extends Component {
   state = {
     open: false,
     body: "",
+    title: "",
     name: "",
     errors: {}
   };
@@ -63,8 +64,7 @@ class PostStockFeed extends Component {
     event.preventDefault();
     this.props.postStockfeed({
       body: this.state.body,
-      author: "test user",
-      title: "Another One!",
+      title: this.state.title,
       likeCount: 0,
       commentCount: 0
     });
@@ -98,6 +98,17 @@ class PostStockFeed extends Component {
           <DialogContent>
             <form onSubmit={this.handleSubmit}>
               <TextField
+                name="title"
+                type="text"
+                // label="SCREAM!!"
+                placeholder="Title"
+                error={errors.body ? true : false}
+                helperText={errors.body}
+                className={classes.textField}
+                onChange={this.handleChange}
+                fullWidth
+              />
+              <TextField
                 name="body"
                 type="text"
                 // label="SCREAM!!"
@@ -110,6 +121,7 @@ class PostStockFeed extends Component {
                 onChange={this.handleChange}
                 fullWidth
               />
+
               <Button
                 type="submit"
                 variant="contained"

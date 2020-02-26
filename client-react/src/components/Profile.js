@@ -41,11 +41,11 @@ const styles = theme => ({
       }
     },
     "& .profile-image": {
-      width: 200,
-      height: 200,
+      width: 100,
+      height: 100,
       objectFit: "cover",
       maxWidth: "100%",
-      borderRadius: "50%"
+      borderRadius: "10%"
     },
     "& .profile-details": {
       textAlign: "center",
@@ -82,26 +82,14 @@ class Profile extends Component {
   render() {
     const {
       classes,
-      user: {
-        name,
-        lastupdatedate,
-        bio,
-        stocks,
-        location,
-        loading,
-        authenticated
-      }
+      user: { name, bio, title, avatar, loading, authenticated }
     } = this.props;
     let profileMarkup = !loading ? (
       authenticated ? (
         <Paper className={classes.paper}>
           <div className={classes.profile}>
             <div className="image-wrapper">
-              <img
-                className="profile-image"
-                src="https://storage.googleapis.com/afs-prod/media/media:63b9dfab17204b65854d60a8825f4c28/1000.jpeg"
-                alt="profile"
-              />
+              <img className="profile-image" src={avatar} alt="profile" />
             </div>
             <hr />
             <div className="profile-details">
@@ -113,34 +101,24 @@ class Profile extends Component {
               >
                 {name}
               </MuiLink>
+              <br />
+              {title && <Fragment>{title}</Fragment>}
               <hr />
               {bio && <Typography variant="body2">{bio}</Typography>}
               <hr />
-              {location && (
-                <Fragment>
-                  <LocationOn color="primary" /> <span>{location}</span>
-                </Fragment>
-              )}
-              <hr />
-              {stocks && (
-                <Fragment>
-                  <LinkIcon color="primary" />
-                  <a href={stocks} target="_blank" rel="noopener noreferrer">
-                    {" "}
-                    {stocks}
-                  </a>
-                  <hr />
-                </Fragment>
-              )}
-              {/* <CalendarToday color="primary" />{' '}
-              <span>Joined {dayjs(createdAt).format('MMM YYYY')}</span> */}
             </div>
-            <Tooltip title="LogOut" placement="top">
-              <IconButton onClick={this.handleLogout}>
-                <KeyboardReturn color="primary" />
-              </IconButton>
-            </Tooltip>
-            <EditDetails />
+            <div className={classes.buttons}>
+              <Tooltip title="LogOut" placement="top">
+                <IconButton
+                  onClick={this.handleLogout}
+                  className={classes.buttons}
+                >
+                  <KeyboardReturn color="primary" />
+                </IconButton>
+              </Tooltip>
+
+              <EditDetails />
+            </div>
           </div>
         </Paper>
       ) : (

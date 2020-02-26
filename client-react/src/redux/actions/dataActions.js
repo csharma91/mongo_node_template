@@ -41,7 +41,7 @@ export const likeStockfeed = stockfeedId => dispatch => {
   const AuthToken = localStorage.getItem("AuthToken");
   axios.defaults.headers.common["x-auth-token"] = AuthToken;
   axios
-    .get(`/api/stockfeed/${stockfeedId}/like`)
+    .put(`/api/stockfeed/${stockfeedId}/like`)
     .then(res => {
       dispatch({
         type: LIKE_STOCKFEED,
@@ -55,7 +55,7 @@ export const likeStockfeed = stockfeedId => dispatch => {
 export const unlikeStockfeed = stockfeedId => dispatch => {
   const AuthToken = localStorage.getItem("AuthToken");
   axios.defaults.headers.common["x-auth-token"] = AuthToken;
-  axios.get(`/api/stockfeed/${stockfeedId}/unlike`).then(res => {
+  axios.put(`/api/stockfeed/${stockfeedId}/unlike`).then(res => {
     dispatch({
       type: UNLIKE_STOCKFEED,
       payload: res.data

@@ -16,27 +16,31 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import EditIcon from "@material-ui/icons/Edit";
 
 const styles = theme => ({
-  ...theme.spreadThis
+  ...theme.spreadThis,
+  buttons: {
+    textAlign: "center",
+    "& a": {
+      margin: "20px 10px"
+    }
+  }
 });
 
 class EditDetails extends Component {
   state = {
     name: "",
+    title: "",
     bio: "",
     stocks: "",
+    avatar: "",
     open: false
   };
 
-  mapUserDetailsToState = (name, bio, stocks) => {
+  mapUserDetailsToState = (name, title, bio, avatar) => {
     this.setState({
       name: name ? name : "",
       bio: bio ? bio : "",
-      stocks: stocks ? stocks : ""
+      title: title ? title : ""
     });
-    console.log("Map User to State");
-    console.log(name);
-    console.log(bio);
-    console.log(stocks);
   };
 
   handleOpen = () => {
@@ -44,12 +48,8 @@ class EditDetails extends Component {
     this.mapUserDetailsToState(
       this.props.name,
       this.props.bio,
-      this.props.stocks
+      this.props.title
     );
-    console.log("StateName");
-    console.log(this.state.name);
-    console.log("StateOpen");
-    console.log(this.state.open);
   };
 
   handleClose = () => {
@@ -66,7 +66,7 @@ class EditDetails extends Component {
     const userDetails = {
       name: this.state.name,
       bio: this.state.bio,
-      stocks: this.state.stocks
+      title: this.state.title
     };
     this.props.editUserDetails(userDetails);
     this.handleClose();
@@ -76,7 +76,7 @@ class EditDetails extends Component {
     this.mapUserDetailsToState(
       this.props.name,
       this.props.bio,
-      this.props.stocks
+      this.props.title
     );
 
     console.log("CompDidMount", this.props.name);
@@ -86,7 +86,7 @@ class EditDetails extends Component {
     return (
       <Fragment>
         <Tooltip title="Edit Details" placement="top">
-          <IconButton onClick={this.handleOpen} className={classes.button}>
+          <IconButton onClick={this.handleOpen} className={classes.buttons}>
             <EditIcon color="primary" />
           </IconButton>
         </Tooltip>
@@ -123,11 +123,11 @@ class EditDetails extends Component {
               />
 
               <TextField
-                name="stocks"
+                name="title"
                 type="text"
-                label="Stocks"
+                label="Title"
                 className={classes.textField}
-                value={this.state.stocks}
+                value={this.state.title}
                 onChange={this.handleChange}
                 fullWidth
               />

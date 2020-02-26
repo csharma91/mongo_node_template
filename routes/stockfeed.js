@@ -2,10 +2,12 @@ const express = require("express");
 const router = express.Router();
 
 const { check, validationResult } = require("express-validator");
-const User = require("../models/User");
+
 // Auth Middleware
 const auth = require("../middleware/auth");
 
+// Models
+const User = require("../models/User");
 const StockFeed = require("../models/StockFeed");
 const StockFeedLikes = require("../models/StockFeedLikes");
 
@@ -44,8 +46,30 @@ router.get("/:id", auth, async (req, res) => {
   }
 });
 
+//@route    DELETE api/stockfeeds/:id
+//@desc     DELETE Stockfeed by ID
+//@access   Private
+
+router.delete("/:id", auth, async (req, res) => {
+  try {
+    let stockfeed = await StockFeed.findById(req.params.id);
+    if (!stockfeed) return res.status(404).json({ msg: "Stockfeed not Found" });
+
+    // Make Sure User owns Stockfeed
+    if (stockfeed.user.toString() != req.user.id) {
+      return res.status(401).json({ msg: "Not Authorized" });
+    }
+
+    await stockfeed.remove();
+    res.json({ msg: "Stockfeed Removed" });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send("Server Error");
+  }
+});
+
 //@route POST api/stockfeed
-//@desc Get all user stockfeed
+//@desc  Create a Stockfeed
 //@access Private
 
 router.post(
@@ -53,7 +77,10 @@ router.post(
   [
     auth,
     [
-      check("author", "Author is required")
+      check("body", "Body is required")
+        .not()
+        .isEmpty(),
+      check("title", "Title is required")
         .not()
         .isEmpty()
     ]
@@ -63,29 +90,17 @@ router.post(
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-    const {
-      author,
-      title,
-      body,
-      companyTags,
-      likeCount,
-      commentCount,
-      url,
-      urlToImage,
-      user
-    } = req.body;
+
     try {
+      const user = await User.findById(req.user.id).select("-password");
       const newStockFeed = new StockFeed({
-        author,
-        title,
-        body,
-        companyTags,
-        likeCount,
-        commentCount,
-        url,
-        urlToImage,
-        user: req.user.id
+        user: req.user.id,
+        urlToImage: user.avatar,
+        author: user.name,
+        title: req.body.title,
+        body: req.body.body
       });
+
       const stockfeed = await newStockFeed.save();
       res.json(stockfeed);
     } catch (err) {
@@ -95,97 +110,131 @@ router.post(
   }
 );
 
-//@route GET api/stockfeeds/:id/like  == :id = stockfeedId/
-// Exmaple User ID test = 5e4f832ad3438a9081ee75dd
-//                 test2 = 5e536cc10c1275a3169cb4e7
+// @route   GET /:id/like
+//@desc     Like a Stockfeed
+//@access   Private
 
-//req.user is Authenticated User
-//req.params.id is the stockfeed ID
+router.put("/:id/like", auth, async (req, res) => {
+  try {
+    const stockfeed = await StockFeed.findById(req.params.id);
 
-router.get("/:id/like", auth, async (req, res) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(400).json({ errors: errors.array() });
+    //Check if Stockfeed has already been liked
+
+    if (
+      stockfeed.likes.filter(like => like.user.toString() === req.user.id)
+        .length > 0
+    ) {
+      return res.status(400).json({ msg: "Already Liked!" });
+    }
+    stockfeed.likes.unshift({ user: req.user.id });
+    await stockfeed.save();
+    res.json(stockfeed.likes);
+  } catch (err) {
+    console.log(err.message);
+    res.status(500).send("Server Error");
   }
+});
 
-  // Logic for Like - only single user
-  let likecheck_user = await StockFeedLikes.find({
-    user: req.user.id.toString()
-  });
-  let likecheck_feed_id = await StockFeedLikes.find({
-    stockfeedId: req.params.id.toString()
-  });
+// @route   GET /:id/unlike
+//@desc     Like a Stockfeed
+//@access   Private
 
-  if (1 === 2) {
-    // if (likecheck_feed_id.length !== 0 && likecheck_user.length !== 0) {
-    return res.status(404).json({ msg: "You cannot like twice son" });
-  } else {
+router.put("/:id/unlike", auth, async (req, res) => {
+  try {
+    const stockfeed = await StockFeed.findById(req.params.id);
+
+    //Check if Stockfeed has already been liked
+
+    if (
+      stockfeed.likes.filter(like => like.user.toString() === req.user.id)
+        .length === 0
+    ) {
+      return res.status(400).json({ msg: "Post has not been liked" });
+    }
+
+    //Get remove Index
+    const removeIndex = stockfeed.likes
+      .map(like => like.user.toString())
+      .indexOf(req.user.id);
+    stockfeed.likes.splice(removeIndex, 1);
+
+    await stockfeed.save();
+    res.json(stockfeed.likes);
+  } catch (err) {
+    console.log(err.message);
+    res.status(500).send("Server Error");
+  }
+});
+
+//@route POST api/stockfeed/comment
+//@desc  Comment on a Stockfeed
+//@access Private
+
+router.post(
+  "/:id/comment",
+  [
+    auth,
+    [
+      check("body", "Body is required")
+        .not()
+        .isEmpty()
+    ]
+  ],
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
     try {
-      // Add Record to StockFeedLike Table
-      const newStockFeedLike = new StockFeedLikes({
-        name: req.user.name,
-        stockfeedId: req.params.id.toString(),
-        user: req.user.id.toString()
-      });
-      const stockfeedLike = await newStockFeedLike.save();
-      res.json(stockfeedLike);
+      const user = await User.findById(req.user.id).select("-password");
+      const stockfeed = await StockFeed.findById(req.params.id);
 
-      // Increament Like Count in Stockfeeds Table
-      let stockfeed = await StockFeed.find({ _id: req.params.id });
-      let newLikeCount = stockfeed[0];
-      newLikeCount.likeCount = stockfeed[0].likeCount + 1;
-      newstockfeed = await StockFeed.findByIdAndUpdate(
-        req.params.id,
-        { $set: newLikeCount },
-        { new: true }
-      );
-      // res.json(newLikeCount.likeCount);
+      const newComment = {
+        text: req.body.body,
+        author: user.name,
+        urlToImage: user.avatar,
+        user: req.user.id
+      };
+      stockfeed.comments.unshift(newComment);
+      await stockfeed.save();
+      res.json(stockfeed.comments);
     } catch (err) {
       console.error(err.message);
       res.status(500).send("Server Error");
     }
   }
-});
+);
 
-//@route GET api/stockfeeds/:id/unlike  == :id = stockfeedId/
-// Exmaple User ID test = 5e4f832ad3438a9081ee75dd
-//                 test2 = 5e536cc10c1275a3169cb4e7
-
-//req.user is Authenticated User
-//req.params.id is the stockfeed ID
-
-router.get("/:id/unlike", auth, async (req, res) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(400).json({ errors: errors.array() });
-  }
-
-  // Logic for Like - only single user
-  let likecheck_user = await StockFeedLikes.find({
-    user: req.user.id.toString()
-  });
-  let likecheck_feed_id = await StockFeedLikes.find({
-    stockfeedId: req.params.id.toString()
-  });
-
+//@route  DELETE api/stockfeed/:id/:comment_id/comment
+//@desc   Delete Comment
+//@access Private
+router.delete("/:id/:comment_id/comment", auth, async (req, res) => {
   try {
-    if (likecheck_feed_id.length !== 0 && likecheck_user.length !== 0) {
-      let stockfeed = await StockFeed.find({ _id: req.params.id });
-      let newLikeCount = stockfeed[0];
-      newLikeCount.likeCount = stockfeed[0].likeCount - 1;
-      newstockfeed = await StockFeed.findByIdAndUpdate(
-        req.params.id,
-        { $set: newLikeCount },
-        { new: true }
-      );
-      newstockfeed_unlike = await StockFeedLikes.findByIdAndDelete(
-        req.params.id
-      );
-      return res.status(200).json({ msg: "Unlike Successfull" });
-    } else {
-      return res.status(404).json({ msg: "You cannot unlike this." });
+    const stockfeed = await StockFeed.findById(req.params.id);
+
+    //Pull Out Comment
+    const comment = stockfeed.comments.find(
+      comment => comment.id === req.params.comment_id
+    );
+    // Make Sure Comment Exists
+    if (!comment) {
+      return res.status(404).json({ msg: "Comment does not exists" });
     }
-  } catch (err) {
+
+    //Check User
+    if (comment.user.toString() !== req.user.id) {
+      return res.status(401).json({ msg: "User not authorized" });
+    }
+
+    //Get remove Index
+    const removeIndex = stockfeed.comments
+      .map(comment => comment.user.toString())
+      .indexOf(req.user.id);
+    stockfeed.comments.splice(removeIndex, 1);
+
+    await stockfeed.save();
+  } catch (error) {
     console.error(err.message);
     res.status(500).send("Server Error");
   }
@@ -202,9 +251,5 @@ router.put("/:id", (req, res) => {
 //@route DELETE api/contacts/:id
 //@desc Delete Contact
 //@access Private
-
-router.delete("/:id", (req, res) => {
-  res.send("Delete User Contacts");
-});
 
 module.exports = router;

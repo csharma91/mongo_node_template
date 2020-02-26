@@ -6,7 +6,6 @@ const { check, validationResult } = require("express-validator");
 // Mongo DB Model
 const User = require("../models/User");
 const UserProfile = require("../models/UserProfile");
-const Contact = require("../models/Contact");
 
 // Auth Middleware
 const auth = require("../middleware/auth");
@@ -27,77 +26,67 @@ router.get("/", auth, async (req, res) => {
   }
 });
 
-//FOR TESTING ONLY
-//@route GET api/userprofile/test
-//@desc Get test User Profile
-//@access Public
-
-router.get("/test", async (req, res) => {
-  try {
-    const userProfile = await UserProfile.find({
-      user: "5e4f832ad3438a9081ee75dd"
-    }).sort({
-        lastupdatedate: -1
-    });
-    res.json(userProfile);
-  } catch (error) {
-    console.error(error.message);
-    res.status(500).send("Server Error");
-  }
-});
-
 //@route POST api/userprofile
 //@desc Add User Profile Info
 //@access Private
 
-router.post(
-  "/",
-  [
-    auth,
-    [
-      check("name", "Name is required")
-        .not()
-        .isEmpty()
-    ]
-  ],
-  async (req, res) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
-    }
-    const { name, bio, location, stocks, newssource } = req.body;
-    try {
-      const newUserProfile = new UserProfile({
-        name,
-        bio,
-        location,
-        stocks,
-        newssource,
-        user: req.user.id
-      });
-      const userProfile = await newUserProfile.save();
-      res.json(userProfile);
-    } catch (err) {
-      console.error(err.message);
-      res.status(500).send("Server Error");
-    }
+router.post("/", auth, async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
   }
-);
+  const { bio, title, stocks, newssource, altsource, region } = req.body;
 
-//@route PUT api/contacts/:id
-//@desc Update Contact
-//@access Private
+  const user = await User.findById(req.user.id).select("-password");
 
-router.put("/:id", (req, res) => {
-  res.send("Update User Contacts");
-});
+  //Build Profile Object
+  const profileFields = {};
+  profileFields.user = req.user.id;
+  if (user.name) profileFields.name = user.name;
+  if (bio) profileFields.bio = bio;
+  if (title) profileFields.title = title;
+  if (user.avatar) profileFields.avatar = user.avatar;
 
-//@route DELETE api/contacts/:id
-//@desc Delete Contact
-//@access Private
+  if (stocks) {
+    profileFields.stocks = stocks.split(",").map(stock => stock.trim());
+  }
 
-router.delete("/:id", (req, res) => {
-  res.send("Delete User Contacts");
+  if (newssource) {
+    profileFields.newssource = newssource.split(",").map(news => news.trim());
+  }
+
+  if (altsource) {
+    profileFields.altsource = altsource.split(",").map(source => source.trim());
+  }
+
+  if (region) {
+    profileFields.region = region.split(",").map(reg => reg.trim());
+  }
+  try {
+    let profile = await UserProfile.findOne({ user: req.user.id });
+
+    // If Found porfile then update
+    if (profile) {
+      profile = await UserProfile.findByIdAndUpdate(
+        { id: req.user.id },
+        { $set: profileFields },
+        { new: true }
+      );
+      return res.json(profile);
+    }
+    //Create Profile
+    profile = new UserProfile(profileFields);
+    await profile.save();
+    res.json(profile);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server Error");
+  }
+
+  // console.log(profileFields.stocks);
+  // console.log(profileFields.newssource);
+  // console.log(profileFields.altsource);
+  // res.send("Hello");
 });
 
 module.exports = router;
