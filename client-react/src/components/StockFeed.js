@@ -22,14 +22,18 @@ import { likeStockfeed, unlikeStockfeed } from "../redux/actions/dataActions";
 
 const styles = {
   card: {
-    diplay: "flex",
+    position: "relative",
+    display: "flex",
     marginBottom: 20
   },
   image: {
-    minWidth: 200
+    width: 75,
+    height: 75,
+    objectFit: "cover",
+    maxWidth: "100%",
+    borderRadius: "50%"
   },
   content: {
-    padding: 25,
     objectFit: "cover"
   }
 };
@@ -96,8 +100,8 @@ export class StockFeed extends Component {
     return (
       <Card className={classes.card}>
         <CardMedia
-          image="https://image.cnbcfm.com/api/v1/image/106071584-1565363694999gettyimages-951079756.jpeg"
-          title="Image"
+          image={urlToImage}
+          title="Profile Pic"
           className={classes.image}
         />
         <CardContent className={classes.content}>

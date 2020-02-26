@@ -24,6 +24,7 @@ app.use("/api/stockfeed", require("./routes/stockfeed"));
 // app.use("/api/stockfeed/:id/comment", require("./routes/stockfeed"));
 
 app.use("/api/userprofile", require("./routes/userprofile"));
+app.use("/api/stocktok", require("./routes/stocktok"));
 
 const PORT = process.env.PORT || 5000;
 
