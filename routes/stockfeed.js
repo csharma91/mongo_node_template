@@ -91,17 +91,35 @@ router.post(
       return res.status(400).json({ errors: errors.array() });
     }
 
+    const { title, body, companyTags, url, articleImage } = req.body;
+
     try {
       const user = await User.findById(req.user.id).select("-password");
-      const newStockFeed = new StockFeed({
-        user: req.user.id,
-        urlToImage: user.avatar,
-        author: user.name,
-        title: req.body.title,
-        body: req.body.body
-      });
+      const newStockFeed = {};
+      newStockFeed.user = req.user.id;
+      newStockFeed.author = user.name;
+      newStockFeed.avatar = user.avatar;
+      if (title) {
+        newStockFeed.title = title;
+      }
+      if (body) {
+        newStockFeed.body = body;
+      }
+      if (url) {
+        newStockFeed.url = url;
+      }
+      if (articleImage) {
+        newStockFeed.articleImage = articleImage;
+      }
+      if (companyTags) {
+        newStockFeed.companyTags = companyTags
+          .split(",")
+          .map(comp => comp.trim());
+      }
 
-      const stockfeed = await newStockFeed.save();
+      //Create Stock Feed
+      stockfeed = new StockFeed(newStockFeed);
+      await stockfeed.save();
       res.json(stockfeed);
     } catch (err) {
       console.error(err.message);

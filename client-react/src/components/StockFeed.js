@@ -27,11 +27,14 @@ const styles = {
     marginBottom: 20
   },
   image: {
-    width: 75,
-    height: 75,
-    objectFit: "cover",
-    maxWidth: "100%",
-    borderRadius: "50%"
+    minWidth: 200,
+    objectFit: "cover"
+
+    // width: 75,
+    // height: 75,
+    // objectFit: "cover",
+    // maxWidth: "100%",
+    // borderRadius: "50%"
   },
   content: {
     objectFit: "cover"
@@ -60,6 +63,11 @@ export class StockFeed extends Component {
     this.props.unlikeStockfeed(this.props.stockfeed._id);
     console.log("unlike");
   };
+
+  testFunc = body => {
+    return body.replace(/^(.{200}[^\s]*).*/, "$1") + " ....";
+  };
+
   render() {
     const {
       classes,
@@ -72,7 +80,7 @@ export class StockFeed extends Component {
         likes,
         comments,
         url,
-        urlToImage,
+        avatar,
         date
       },
       user: { authenticated }
@@ -100,14 +108,14 @@ export class StockFeed extends Component {
     return (
       <Card className={classes.card}>
         <CardMedia
-          image={urlToImage}
+          image={avatar}
           title="Profile Pic"
           className={classes.image}
         />
         <CardContent className={classes.content}>
-          <Typography variant="h5">{title}</Typography>
+          <Typography variant="body2">{title}</Typography>
           <hr style={{ border: "none", margin: "0 0 10px 0" }} />
-          <Typography variant="body2">{body}</Typography>
+          <Typography variant="body2">{this.testFunc(body)}</Typography>
 
           <hr style={{ border: "none", margin: "0 0 10px 0" }} />
 

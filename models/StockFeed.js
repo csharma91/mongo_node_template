@@ -18,7 +18,7 @@ const StockfeedSchema = mongoose.Schema({
   },
 
   companyTags: {
-    type: String
+    type: [String]
   },
 
   likeCount: {
@@ -32,14 +32,35 @@ const StockfeedSchema = mongoose.Schema({
     type: String
   },
 
-  urlToImage: {
+  avatar: {
     type: String
+  },
+
+  articleImage: {
+    type: String
+  },
+
+  sentimentScore1: {
+    type: Number
+  },
+
+  sentimentScore2: {
+    type: Number
+  },
+
+  sentimentScore3: {
+    type: Number
+  },
+
+  keywords: {
+    type: [String]
   },
 
   date: {
     type: Date,
     default: Date.now
   },
+
   likes: [
     {
       user: {
