@@ -2,6 +2,7 @@ import requests
 import pymongo
 from bson.objectid import ObjectId
 from pymongo import MongoClient
+import azureTextAnalytics as textScore
 # #For Keywords
 # from gensim.summarization import keywords
 # #For Sentiment Score and Polartiy
@@ -43,33 +44,26 @@ for p in userProfile:
             # Only look for posts in English
             if result['lang'] == "en":
                 comp = [tick]
+                #Text Analytics API Call
+                doc = result["summary"]
+                #docSentiment,docPos, docNeut, docNeg, key_phrase = textScore.runTextAnalytics(doc)
                 posts.append({
                     "user": ObjectId(userId),
                     "author": result["source"],
                     "title": result["headline"],
                     "body": result["summary"],
                     "avatar": result["image"],
-                    "companyTags": comp
+                    "companyTags": comp,
+                    "sentimentScore1:": int(docPos*100),
+                    "sentimentScore2:": int(docNeut*100),
+                    "sentimentScore3:": int(docNeg*100),
+                    "sentimentType": docSentiment,
+                    "key_phrase": key_phrase
                 })
                 print("Headline-----------")
                 print(result["headline"])
                 print("Summary-----------")
                 print(result["summary"])
-                # blob = TextBlob(result["headline"])
-                # score = 0
-                # count = 0
-                # for sentence in blob.sentences:
-                #     score = score + (sentence.sentiment.polarity)
-                #     count += 1
 
-                # avgScore = score/count
-
-                # print ("Headline-----------")
-                # print( result["headline"])
-                # print ("Summary-----------")
-                # print( result["summary"])
-
-                # print(avgScore)
-
-
-# stockfeed.insert_many(posts)
+                
+stockfeed.insert_many(posts)

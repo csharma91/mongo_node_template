@@ -18,7 +18,7 @@ const UserProfile = require("../models/UserProfile");
 router.get("/", auth, async (req, res) => {
   try {
     const userprofile = await UserProfile.find({ user: req.user.id }).sort({
-      date: -1
+      sentimentScore1: -1
     });
     const stockList = userprofile[0].stocks;
 

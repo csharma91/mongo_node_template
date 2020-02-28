@@ -52,6 +52,10 @@ const StockfeedSchema = mongoose.Schema({
     type: Number
   },
 
+  sentimentType: {
+    type: String
+  },
+
   keywords: {
     type: [String]
   },

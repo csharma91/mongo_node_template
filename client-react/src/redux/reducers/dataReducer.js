@@ -1,5 +1,6 @@
 import {
   SET_STOCKFEEDS,
+  SET_STOCKFEED,
   LIKE_STOCKFEED,
   UNLIKE_STOCKFEED,
   LOADING_DATA,
@@ -24,13 +25,18 @@ export default function(state = initialState, actions) {
         stockfeeds: actions.payload,
         loading: false
       };
+
+    case SET_STOCKFEED:
+      return {
+        ...state,
+        stockfeed: actions.payload
+      };
     case LIKE_STOCKFEED:
     case UNLIKE_STOCKFEED:
       let index = state.stockfeeds.findIndex(
         stockfeed => stockfeed.id === actions.payload.id
       );
-      console.log("LIKE33");
-      console.log(index);
+
       state.stockfeed[index] = actions.payload;
       return {
         ...state

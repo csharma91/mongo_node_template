@@ -37,6 +37,22 @@ export const getStockfeeds = () => dispatch => {
 };
 
 //Like a Stockfeed
+export const getStockfeed = stockfeedId => dispatch => {
+  const AuthToken = localStorage.getItem("AuthToken");
+  axios.defaults.headers.common["x-auth-token"] = AuthToken;
+  axios
+    .get(`/api/stockfeed/${stockfeedId}`)
+    .then(res => {
+      dispatch({
+        type: SET_STOCKFEED,
+        payload: res.data
+      });
+      dispatch({ type: STOP_LOADING_UI });
+    })
+    .catch(err => console.log(err));
+};
+
+//Like a Stockfeed
 export const likeStockfeed = stockfeedId => dispatch => {
   const AuthToken = localStorage.getItem("AuthToken");
   axios.defaults.headers.common["x-auth-token"] = AuthToken;

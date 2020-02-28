@@ -4,6 +4,8 @@ import { Link } from "react-router-dom";
 import RelativeTime from "react-relative-time";
 import PropTypes from "prop-types";
 import MyButton from "../util/MyButton";
+import StockfeedDialog from "./StockfeedDialog";
+import LikeButton from "./LikeButton";
 
 // MUI Stuff
 import Card from "@material-ui/core/Card";
@@ -13,12 +15,9 @@ import Typography from "@material-ui/core/Typography";
 
 //Icons
 import ChatIcon from "@material-ui/icons/Chat";
-import FavoriteIcon from "@material-ui/icons/Favorite";
-import FavoriteBorder from "@material-ui/icons/FavoriteBorder";
 
 //Redux
 import { connect } from "react-redux";
-import { likeStockfeed, unlikeStockfeed } from "../redux/actions/dataActions";
 
 const styles = {
   card: {
@@ -38,32 +37,26 @@ const styles = {
   },
   content: {
     objectFit: "cover"
+  },
+  title: {
+    fontSize: 20,
+    marginTop: 10
+  },
+  bodytext: {
+    fontSize: 12
+  },
+  usertext: {
+    fontSize: 12,
+    fontWeight: "bold"
+  },
+  periodtext: {
+    fontSize: 12,
+    textAlign: "right",
+    marginTop: -20
   }
 };
 
 export class StockFeed extends Component {
-  likedStockfeed = () => {
-    console.log("Like Test");
-    if (
-      this.props.stockfeed.likes &&
-      this.props.stockfeed.likes.find(
-        like => like.user === this.props.stockfeed.user
-      )
-    )
-      return true;
-    else return false;
-  };
-
-  likeStockfeed = () => {
-    this.props.likeStockfeed(this.props.stockfeed._id);
-    console.log("like");
-  };
-
-  unlikeStockfeed = () => {
-    this.props.unlikeStockfeed(this.props.stockfeed._id);
-    console.log("unlike");
-  };
-
   testFunc = body => {
     return body.replace(/^(.{200}[^\s]*).*/, "$1") + " ....";
   };
@@ -81,29 +74,14 @@ export class StockFeed extends Component {
         comments,
         url,
         avatar,
-        date
+        date,
+        sentimentType
       },
       user: { authenticated }
     } = this.props;
 
     const likeCount = likes.length;
     const commentCount = comments.length;
-
-    const likeButton = !authenticated ? (
-      <MyButton top="Like">
-        <Link to="/login">
-          <FavoriteBorder color="primary" />
-        </Link>
-      </MyButton>
-    ) : this.likedStockfeed() ? (
-      <MyButton tip="Undo Like" onClick={this.unlikeStockfeed}>
-        <FavoriteIcon color="primary" />
-      </MyButton>
-    ) : (
-      <MyButton tip="Like" onClick={this.likeStockfeed}>
-        <FavoriteBorder color="primary" />
-      </MyButton>
-    );
 
     return (
       <Card className={classes.card}>
@@ -112,10 +90,27 @@ export class StockFeed extends Component {
           title="Profile Pic"
           className={classes.image}
         />
+
         <CardContent className={classes.content}>
-          <Typography variant="body2">{title}</Typography>
+          <div>
+            <Typography variant="body2" className={classes.usertext}>
+              {author}
+            </Typography>
+          </div>
+          <Typography
+            variant="body2"
+            className={classes.periodtext}
+            color="textSecondary"
+          >
+            <RelativeTime value={date} />
+          </Typography>
+          <Typography variant="body2" className={classes.title}>
+            {title}
+          </Typography>
           <hr style={{ border: "none", margin: "0 0 10px 0" }} />
-          <Typography variant="body2">{this.testFunc(body)}</Typography>
+          <Typography variant="body2" className={classes.bodytext}>
+            {this.testFunc(body)}
+          </Typography>
 
           <hr style={{ border: "none", margin: "0 0 10px 0" }} />
 
@@ -125,19 +120,16 @@ export class StockFeed extends Component {
             to={`/users/${author}`}
             color="primary"
           >
-            {author}
+            {sentimentType}
           </Typography>
 
-          <Typography variant="body2" color="textSecondary">
-            <RelativeTime value={date} />
-          </Typography>
-
-          {likeButton}
+          <LikeButton stockfeedId={_id} />
           <span>{likeCount} Likes</span>
           <MyButton tip="Comments">
             <ChatIcon color="primary" />
           </MyButton>
           <span>{commentCount} Comments</span>
+          <StockfeedDialog id={_id} author={author} />
         </CardContent>
       </Card>
     );
@@ -145,8 +137,6 @@ export class StockFeed extends Component {
 }
 
 StockFeed.propTypes = {
-  likeStockfeed: PropTypes.func.isRequired,
-  unlikeStockfeed: PropTypes.func.isRequired,
   user: PropTypes.object.isRequired,
   stockfeed: PropTypes.object.isRequired,
   classes: PropTypes.object.isRequired
@@ -156,12 +146,4 @@ const mapStateToProps = state => ({
   user: state.user
 });
 
-const mapActionsToProps = {
-  likeStockfeed,
-  unlikeStockfeed
-};
-
-export default connect(
-  mapStateToProps,
-  mapActionsToProps
-)(withStyles(styles)(StockFeed));
+export default connect(mapStateToProps)(withStyles(styles)(StockFeed));
