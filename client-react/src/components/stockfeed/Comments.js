@@ -11,14 +11,23 @@ import Typography from "@material-ui/core/Typography";
 const styles = theme => ({
   ...theme.spreadThis,
   commentImage: {
-    maxWidth: "100%",
-    height: 100,
+    maxWidth: "90%",
+    height: 90,
     objectFit: "cover",
-    borderRadius: "50%",
-    marginLeft: 20
+    borderRadius: "50%"
   },
   commentData: {
     marginLeft: 30
+  },
+  commentText: {
+    fontSize: 16
+  },
+  commentDate: {
+    fontSize: 12
+  },
+  commentAuthor: {
+    fontsize: 16,
+    fontWeight: "bold"
   }
 });
 
@@ -42,12 +51,26 @@ class Comments extends Component {
                   </Grid>
                   <Grid item sm={9}>
                     <div className={classes.commentData}>
-                      <Typography variant="h5">{author}</Typography>
-                      <Typography variant="body2" color="textSecondary">
+                      <Typography
+                        variant="body2"
+                        className={classes.commentAuthor}
+                      >
+                        {author}
+                      </Typography>
+                      <Typography
+                        variant="body2"
+                        className={classes.commentDate}
+                        color="textSecondary"
+                      >
                         {dayjs(date).format("h:mm a, MMMM DD YYYY")}
                       </Typography>
                       <hr className={classes.invisibleSeperator} />
-                      <Typography variant="body1">{text}</Typography>
+                      <Typography
+                        variant="body1"
+                        className={classes.commentText}
+                      >
+                        {text}
+                      </Typography>
                     </div>
                   </Grid>
                 </Grid>

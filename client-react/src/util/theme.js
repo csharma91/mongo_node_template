@@ -85,7 +85,7 @@ export default {
     },
     invisibleSeperator: {
       border: "none",
-      margin: 4
+      margin: 10
     },
     visibleSeperator: {
       width: "100%",

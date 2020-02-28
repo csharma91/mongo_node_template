@@ -17,27 +17,23 @@ const StockfeedSchema = mongoose.Schema({
     type: String
   },
 
-  companyTags: {
-    type: [String]
+  postType: {
+    type: String,
+    required: true
   },
-
-  likeCount: {
-    type: Number
-  },
-  commentCount: {
-    type: Number
-  },
-
-  url: {
+  avatar: {
     type: String
   },
-
-  avatar: {
+  url: {
     type: String
   },
 
   articleImage: {
     type: String
+  },
+
+  companyTags: {
+    type: [String]
   },
 
   sentimentScore1: {
@@ -65,6 +61,12 @@ const StockfeedSchema = mongoose.Schema({
     default: Date.now
   },
 
+  likeCount: {
+    type: Number
+  },
+  commentCount: {
+    type: Number
+  },
   likes: [
     {
       user: {

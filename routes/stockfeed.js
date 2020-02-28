@@ -19,7 +19,7 @@ router.get("/", auth, async (req, res) => {
   try {
     const stockfeeds = await StockFeed.find({ user: req.user.id })
       .sort({
-        "sentimentScore1:": -1
+        sentimentScore1: -1
       })
       .limit(20);
     res.json(stockfeeds);
@@ -101,6 +101,7 @@ router.post(
       newStockFeed.user = req.user.id;
       newStockFeed.author = user.name;
       newStockFeed.avatar = user.avatar;
+      newStockFeed.postType = "post";
       if (title) {
         newStockFeed.title = title;
       }

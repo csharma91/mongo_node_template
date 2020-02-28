@@ -26,14 +26,15 @@ const styles = {
     marginBottom: 20
   },
   image: {
-    minWidth: 200,
-    objectFit: "cover"
-
-    // width: 75,
-    // height: 75,
+    // minWidth: 200,
     // objectFit: "cover",
-    // maxWidth: "100%",
-    // borderRadius: "50%"
+
+    minWidth: 50,
+    height: 50,
+    objectFit: "cover",
+    maxWidth: "100%",
+    borderRadius: "50%",
+    margin: 5
   },
   content: {
     objectFit: "cover"
@@ -41,10 +42,12 @@ const styles = {
   title: {
     fontSize: 16,
     marginTop: 10,
-    fontWeight: "bold"
+    fontWeight: "bold",
+    textDecoration: "none",
+    color: "black"
   },
   bodytext: {
-    fontSize: 12
+    fontSize: 14
   },
   usertext: {
     fontSize: 12,
@@ -53,7 +56,12 @@ const styles = {
   periodtext: {
     fontSize: 12,
     textAlign: "right",
-    marginTop: -20
+    marginTop: -20,
+    marginLeft: 600,
+    position: "absolute"
+  },
+  bottomBar: {
+    fontsize: 12
   }
 };
 
@@ -103,32 +111,26 @@ export class StockFeed extends Component {
           >
             <RelativeTime value={date} />
           </Typography>
-          <Typography variant="body2" className={classes.title}>
-            {title}
-          </Typography>
-          <hr style={{ border: "none", margin: "0 0 10px 0" }} />
+          <a className={classes.title} href={url} target="_blank">
+            {companyTags} {" : "} {title}
+          </a>
+          <hr style={{ border: "none", margin: "0 0 5px 0" }} />
           <Typography variant="body2" className={classes.bodytext}>
             {this.testFunc(body)}
           </Typography>
 
-          <hr style={{ border: "none", margin: "0 0 10px 0" }} />
+          <hr style={{ border: "none", margin: "0 0 5px 0" }} />
+          <div className={classes.bottomBar}>
+            <span className={classes.bottomBar}>{sentimentType}</span>
+            <LikeButton stockfeedId={_id} />
+            <span className={classes.bottomBar}>{likeCount} Likes</span>
+            <MyButton tip="Comments">
+              <ChatIcon color="primary" />
+            </MyButton>
+            <span className={classes.bottomBar}>{commentCount} Comments</span>
 
-          <Typography
-            variant="body1"
-            component={Link}
-            to={`/users/${author}`}
-            color="primary"
-          >
-            {sentimentType}
-          </Typography>
-
-          <LikeButton stockfeedId={_id} />
-          <span>{likeCount} Likes</span>
-          <MyButton tip="Comments">
-            <ChatIcon color="primary" />
-          </MyButton>
-          <span>{commentCount} Comments</span>
-          <StockfeedDialog id={_id} author={author} />
+            <StockfeedDialog id={_id} author={author} />
+          </div>
         </CardContent>
       </Card>
     );

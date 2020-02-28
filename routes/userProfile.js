@@ -68,16 +68,15 @@ router.post("/", auth, async (req, res) => {
     // If Found porfile then update
     if (profile) {
       profile = await UserProfile.findByIdAndUpdate(
-        { id: req.user.id },
+        { _id: profile.id },
         { $set: profileFields },
         { new: true }
       );
-      return res.json(profile);
     }
     //Create Profile
     profile = new UserProfile(profileFields);
     await profile.save();
-    res.json(profile);
+    return res.json(profile);
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server Error");

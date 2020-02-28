@@ -28,12 +28,17 @@ import { getStockfeed, clearErrors } from "../../redux/actions/dataActions";
 const styles = theme => ({
   ...theme.spreadThis,
   mainImage: {
-    maxWidth: 200,
-    height: 200,
-    objectFit: "cover"
+    maxWidth: 1000,
+    height: 250,
+    objectFit: "cover",
+    display: "block",
+    position: "relative",
+    margin: "0 auto"
   },
-  dialogContent: {
-    padding: 20
+  dialogContent: { display: "inline" },
+  dialogTitle: { display: "inline" },
+  dialogDate: {
+    textAlign: "center"
   },
   closeButton: {
     position: "absolute",
@@ -69,6 +74,7 @@ class StockfeedDialog extends Component {
         author,
         title,
         body,
+        articleImage,
         companyTags,
         likes,
         comments,
@@ -83,26 +89,48 @@ class StockfeedDialog extends Component {
     const dialogMarkup = loading ? (
       <CircularProgress size={200} />
     ) : (
-      <Grid container spacing={10}>
-        <Grid item sm={5}>
-          <img src={avatar} alt="Main Image" className={classes.mainImage} />
-        </Grid>
-        <Grid item sm={7}>
-          <Typography
+      <Grid>
+        <Grid item sm={10}>
+          <img
+            src={articleImage}
+            alt="Main Image"
+            className={classes.mainImage}
+          />
+          <hr className={classes.invisibleSeperator} />
+          <div className={classes.dialogTitle}>
+            <h3>{title}</h3>
+          </div>
+
+          <div className={classes.dialogDate}>
+            {dayjs(date).format("h:mm a, MMMM, DD YYYY")}
+          </div>
+          <hr className={classes.invisibleSeperator} />
+          <div className={classes.dialogContent}>{body}</div>
+          <hr className={classes.invisibleSeperator} />
+
+          {/* <Typography
             component={Link}
             color="primary"
             variant="h5"
             to={`/user/${author}`}
+            className={classes.dialogTitle}
           >
-            {author}
+            {title}
           </Typography>
           <hr className={classes.invisibleSeperator} />
-          <Typography variant="body2" color="textSecondary">
+          <Typography
+            variant="body2"
+            color="textSecondary"
+            className={classes.dialogDate}
+          >
             {dayjs(date).format("h:mm a, MMMM, DD YYYY")}
           </Typography>
           <hr className={classes.invisibleSeperator} />
-          <Typography variant="body2">{body}</Typography>
+          <Typography variant="body2" className={classes.dialogContent}>
+            {body}
+          </Typography> */}
         </Grid>
+
         <hr className={classes.visibleSeperator} />
         <CommentForm stockfeedId={this.props.id} />
         <Comments comments={comments} />
@@ -128,7 +156,7 @@ class StockfeedDialog extends Component {
         <Dialog
           open={this.state.open}
           onClose={this.handleClose}
-          // fullWidth
+          fullWidth
           maxWidth="sm"
         >
           <MyButton
@@ -138,9 +166,7 @@ class StockfeedDialog extends Component {
           >
             <CloseIcon />
           </MyButton>
-          <DialogContent className={classes.dialogContent}>
-            {dialogMarkup}
-          </DialogContent>
+          <DialogContent>{dialogMarkup}</DialogContent>
         </Dialog>
       </Fragment>
     );
