@@ -3,7 +3,7 @@ import withStyles from "@material-ui/core/styles/withStyles";
 import { Link } from "react-router-dom";
 import RelativeTime from "react-relative-time";
 import PropTypes from "prop-types";
-import MyButton from "../util/MyButton";
+import MyButton from "../../util/MyButton";
 import StockfeedDialog from "./StockfeedDialog";
 import LikeButton from "./LikeButton";
 
@@ -39,8 +39,9 @@ const styles = {
     objectFit: "cover"
   },
   title: {
-    fontSize: 20,
-    marginTop: 10
+    fontSize: 16,
+    marginTop: 10,
+    fontWeight: "bold"
   },
   bodytext: {
     fontSize: 12
@@ -90,13 +91,11 @@ export class StockFeed extends Component {
           title="Profile Pic"
           className={classes.image}
         />
-
         <CardContent className={classes.content}>
-          <div>
-            <Typography variant="body2" className={classes.usertext}>
-              {author}
-            </Typography>
-          </div>
+          <Typography variant="body2" className={classes.usertext}>
+            {author}
+          </Typography>
+
           <Typography
             variant="body2"
             className={classes.periodtext}

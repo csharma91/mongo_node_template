@@ -3,9 +3,9 @@ import Grid from "@material-ui/core/Grid";
 import PropTypes from "prop-types";
 import withStyles from "@material-ui/core/styles/withStyles";
 
-import StockFeed from "../components/StockFeed";
-import Profile from "../components/Profile";
-import StockList from "../components/StockList";
+import StockFeed from "../components/stockfeed/StockFeed";
+import Profile from "../components/profile/Profile";
+import StockList from "../components/stockfeed/StockList";
 
 // MUI Stuff
 import Typography from "@material-ui/core/Typography";

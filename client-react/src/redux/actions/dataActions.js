@@ -36,10 +36,11 @@ export const getStockfeeds = () => dispatch => {
     });
 };
 
-//Like a Stockfeed
+//Get a Stockfeed
 export const getStockfeed = stockfeedId => dispatch => {
-  const AuthToken = localStorage.getItem("AuthToken");
-  axios.defaults.headers.common["x-auth-token"] = AuthToken;
+  // const AuthToken = localStorage.getItem("AuthToken");
+  // axios.defaults.headers.common["x-auth-token"] = AuthToken;
+  dispatch({ type: LOADING_UI });
   axios
     .get(`/api/stockfeed/${stockfeedId}`)
     .then(res => {
@@ -77,6 +78,27 @@ export const unlikeStockfeed = stockfeedId => dispatch => {
       payload: res.data
     }).catch(err => console.log(err));
   });
+};
+
+//Submit a Comment
+export const submitComment = (stockfeedId, commentData) => dispatch => {
+  dispatch({ type: LOADING_UI });
+  axios
+    .post(`api/stockfeed/${stockfeedId}/comment`, commentData)
+    .then(res => {
+      dispatch({
+        type: SUBMIT_COMMENT,
+        payload: res.data
+      });
+      dispatch(clearErrors());
+      dispatch({ type: STOP_LOADING_UI });
+    })
+    .catch(err => {
+      dispatch({
+        type: SET_ERRORS,
+        payload: err.response.data
+      });
+    });
 };
 
 //POST a NEW Stockfeed

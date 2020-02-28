@@ -2,8 +2,8 @@ import React, { Component, Fragment } from "react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import PropType from "prop-types";
-import MyButton from "../util/MyButton";
-import PostStockFeed from "./PostStockFeed";
+import MyButton from "../../util/MyButton";
+import PostStockFeed from "../stockfeed/PostStockFeed";
 
 //MUI Stuff
 import AppBar from "@material-ui/core/AppBar";

@@ -20,7 +20,7 @@ import KeyboardReturn from "@material-ui/icons/KeyboardReturn";
 
 //Redux
 import { connect } from "react-redux";
-import { logoutUser } from "../redux/actions/userActions";
+import { logoutUser } from "../../redux/actions/userActions";
 
 // const styles = theme => ({
 //   ...theme.spreadThis

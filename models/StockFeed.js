@@ -82,6 +82,9 @@ const StockfeedSchema = mongoose.Schema({
       text: {
         type: String
       },
+      author: {
+        type: String
+      },
       date: {
         type: Date,
         default: Date.now

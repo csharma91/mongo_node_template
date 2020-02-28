@@ -1,9 +1,11 @@
 import React, { Component, Fragment } from "react";
 import PropTypes from "prop-types";
 import withStyles from "@material-ui/core/styles/withStyles";
-import MyButton from "../util/MyButton";
+import MyButton from "../../util/MyButton";
 import { Link } from "react-router-dom";
 import dayjs from "dayjs";
+import Comments from "./Comments";
+import CommentForm from "./CommentForm";
 
 // MUI Stuff
 import Button from "@material-ui/core/Button";
@@ -21,14 +23,10 @@ import CloseIcon from "@material-ui/icons/Close";
 
 // Redux stuff
 import { connect } from "react-redux";
-import { getStockfeed } from "../redux/actions/dataActions";
+import { getStockfeed, clearErrors } from "../../redux/actions/dataActions";
 
 const styles = theme => ({
   ...theme.spreadThis,
-  invisibleSeperator: {
-    border: "none",
-    margin: 4
-  },
   mainImage: {
     maxWidth: 200,
     height: 200,
@@ -48,16 +46,19 @@ const styles = theme => ({
 });
 class StockfeedDialog extends Component {
   state = {
-    open: false
+    open: false,
+    oldPath: "",
+    newPath: ""
   };
 
   handleOpen = () => {
-    this.setState({ open: true });
     this.props.getStockfeed(this.props.id);
+    this.setState({ open: true });
   };
 
   handleClose = () => {
     this.setState({ open: false });
+    this.props.clearErrors();
   };
 
   render() {
@@ -102,6 +103,17 @@ class StockfeedDialog extends Component {
           <hr className={classes.invisibleSeperator} />
           <Typography variant="body2">{body}</Typography>
         </Grid>
+        <hr className={classes.visibleSeperator} />
+        <CommentForm stockfeedId={this.props.id} />
+        <Comments comments={comments} />
+
+        {/* {{ comments }.length > 0 ? (
+          <Comments comments={comments} />
+        ) : (
+          <div>
+            <p>{"Helllo!!!!"}</p>
+          </div>
+        )} */}
       </Grid>
     );
     return (
@@ -116,7 +128,7 @@ class StockfeedDialog extends Component {
         <Dialog
           open={this.state.open}
           onClose={this.handleClose}
-          fullWidth
+          // fullWidth
           maxWidth="sm"
         >
           <MyButton
@@ -136,8 +148,9 @@ class StockfeedDialog extends Component {
 }
 
 StockfeedDialog.propTypes = {
+  clearErrors: PropTypes.func.isRequired,
   getStockfeed: PropTypes.func.isRequired,
-  _id: PropTypes.string.isRequired,
+  id: PropTypes.string.isRequired,
   author: PropTypes.string.isRequired,
   stockfeed: PropTypes.object.isRequired,
   UI: PropTypes.object.isRequired
@@ -149,7 +162,8 @@ const mapStateToProps = state => ({
 });
 
 const mapActionToProps = {
-  getStockfeed
+  getStockfeed,
+  clearErrors
 };
 
 export default connect(

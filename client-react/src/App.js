@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import axios from 'axios'
+import axios from "axios";
 import jwtDecode from "jwt-decode";
 import "./App.css";
 
@@ -16,7 +16,7 @@ import { createMuiTheme } from "@material-ui/core/styles";
 import themeFile from "./util/theme";
 
 //Components
-import Navbar from "./components/Navbar";
+import Navbar from "./components/layout/Navbar";
 import AuthRoute from "./util/AuthRoute";
 
 //Pages
@@ -25,7 +25,6 @@ import login from "./pages/login";
 import signup from "./pages/signup";
 
 const theme = createMuiTheme(themeFile);
-
 
 const token = localStorage.AuthToken;
 if (token) {
@@ -50,18 +49,8 @@ class App extends Component {
             <div className="container">
               <Switch>
                 <Route exact path="/" component={home} />
-                <AuthRoute
-                  exact
-                  path="/login"
-                  component={login}
-                
-                />
-                <AuthRoute
-                  exact
-                  path="/signup"
-                  component={signup}
-                
-                />
+                <AuthRoute exact path="/login" component={login} />
+                <AuthRoute exact path="/signup" component={signup} />
               </Switch>
             </div>
           </Router>

@@ -4,7 +4,8 @@ import {
   LIKE_STOCKFEED,
   UNLIKE_STOCKFEED,
   LOADING_DATA,
-  POST_STOCKFEED
+  POST_STOCKFEED,
+  SUBMIT_COMMENT
 } from "../types";
 
 const initialState = {
@@ -45,6 +46,14 @@ export default function(state = initialState, actions) {
       return {
         ...state,
         stockfeeds: [actions.payload, ...state.stockfeeds]
+      };
+    case SUBMIT_COMMENT:
+      return {
+        ...state,
+        stockfeed: {
+          ...state.stockfeed,
+          comments: [actions.payload, ...state.stockfeed.comments]
+        }
       };
     default:
       return state;

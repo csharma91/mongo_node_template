@@ -195,7 +195,7 @@ router.post(
   [
     auth,
     [
-      check("body", "Body is required")
+      check("text", "Text Body is required")
         .not()
         .isEmpty()
     ]
@@ -211,7 +211,7 @@ router.post(
       const stockfeed = await StockFeed.findById(req.params.id);
 
       const newComment = {
-        text: req.body.body,
+        text: req.body.text,
         author: user.name,
         urlToImage: user.avatar,
         user: req.user.id
