@@ -1,4 +1,4 @@
 node_modules
 
 #Python Config File
-/PythonScripts/pythonConfig.py
+!PythonScripts/pythonConfig.py
