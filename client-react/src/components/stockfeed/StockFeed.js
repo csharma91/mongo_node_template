@@ -29,11 +29,11 @@ const styles = {
     // minWidth: 200,
     // objectFit: "cover",
 
-    minWidth: 50,
-    height: 50,
+    minWidth: 100,
+    height: 100,
     objectFit: "cover",
     maxWidth: "100%",
-    borderRadius: "50%",
+    // borderRadius: "50%",
     margin: 5
   },
   content: {

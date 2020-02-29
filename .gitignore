@@ -1,1 +1,4 @@
 node_modules
+
+#Python Config File
+/PythonScripts/pythonConfig
