@@ -1,10 +1,11 @@
 import requests
 import pymongo
 from pymongo import MongoClient
+import pythonConfig as pc
 
 
-def TestFunc ():
-    cluster = MongoClient('mongodb+srv://chintan123:chintan123@contactkeeper-xtowj.mongodb.net/test?retryWrites=true&w=majority&ssl=true&ssl_cert_reqs=CERT_NONE')
+def TestFunc():
+    cluster = MongoClient(pc.mongoDB['client'])
     db = cluster["test"]
     collection = db["stockfeeds"]
 
@@ -16,16 +17,14 @@ def TestFunc ():
             # print(key)
             key_list.append(key)
 
-    print (key_list[24])
+    print(key_list[24])
 
     ss = str(key_list[24])
 
     stockfeeds = collection.find({})
     for stockfeed in stockfeeds:
-        stockfeed.update({"$rename":{ss:"sentimentScoreOne"}})
+        stockfeed.update({"$rename": {ss: "sentimentScoreOne"}})
         print(stockfeed[ss])
-
-
 
 
 if __name__ == '__main__':
