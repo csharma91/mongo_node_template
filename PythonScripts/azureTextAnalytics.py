@@ -1,27 +1,26 @@
 from azure.ai.textanalytics import TextAnalyticsClient, TextAnalyticsApiKeyCredential
+import pythonConfig as pconfig
 
 # Documentation
 doc = '''https://docs.microsoft.com/en-us/azure/cognitive-services/text-analytics/quickstarts/text-analytics-sdk?tabs=version-3&pivots=programming-language-python#sentiment-analysis'''
 
 
-key = "dd67128a5a8d45f9b19149c5f5ae6322"
-endpoint = "https://textanalyticsstocktok.cognitiveservices.azure.com/"
+key = pconfig.textAnalytics['key']
+endpoint = pconfig.textAnalytics['endpoint']
+
 
 def runTextAnalytics(textBody):
 
     textBody = str(textBody)
 
-
-    key = "dd67128a5a8d45f9b19149c5f5ae6322"
-    endpoint = "https://textanalyticsstocktok.cognitiveservices.azure.com/"
-
+    key = pconfig.textAnalytics['key']
+    endpoint = pconfig.textAnalytics['endpoint']
 
     def authenticate_client():
         ta_credential = TextAnalyticsApiKeyCredential(key)
         text_analytics_client = TextAnalyticsClient(
             endpoint=endpoint, credential=ta_credential)
         return text_analytics_client
-
 
     def sentiment_analysis(client, textBody):
 
@@ -37,10 +36,8 @@ def runTextAnalytics(textBody):
         docPos = response.sentiment_scores.positive
         docNeut = response.sentiment_scores.neutral
         docNeg = response.sentiment_scores.negative
-        
+
         return docSentiment, docPos, docNeut, docNeg
-
-
 
     def key_phrase_extraction(client, textBody):
 
@@ -58,13 +55,12 @@ def runTextAnalytics(textBody):
 
         except Exception as err:
             print("Encountered exception. {}".format(err))
-        
+
         return response.key_phrases
-    
-    
-    
+
     client = authenticate_client()
-    docSentiment,docPos, docNeut, docNeg = sentiment_analysis(client, textBody)
+    docSentiment, docPos, docNeut, docNeg = sentiment_analysis(
+        client, textBody)
     key_phrase = key_phrase_extraction(client, textBody)
 
-    return docSentiment,docPos, docNeut, docNeg, key_phrase
+    return docSentiment, docPos, docNeut, docNeg, key_phrase
