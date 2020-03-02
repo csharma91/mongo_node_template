@@ -101,6 +101,8 @@ router.post(
       newStockFeed.author = user.name;
       newStockFeed.avatar = user.avatar;
       newStockFeed.postType = "post";
+      newStockFeed.postTypeImage =
+        "https://lh3.googleusercontent.com/proxy/wKMqMhd2vTIbCpXGRucEb4wfX8pr7eHY70mLtTbw2apAsph0BozEmzmLe-VD1JFxBoyDnFr45xguoyAI8CPRNupsqoTxvZE";
       if (title) {
         newStockFeed.title = title;
       }

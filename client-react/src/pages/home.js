@@ -9,6 +9,7 @@ import StockList from "../components/stockfeed/StockList";
 
 // MUI Stuff
 import Typography from "@material-ui/core/Typography";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 //Redux Stuff
 import { connect } from "react-redux";
@@ -29,7 +30,7 @@ export class home extends Component {
         <StockFeed key={stockfeed.title} stockfeed={stockfeed} />
       ))
     ) : (
-      <p>Loading....</p>
+      <CircularProgress size={200} />
     );
     return (
       <Grid container spacing={3}>

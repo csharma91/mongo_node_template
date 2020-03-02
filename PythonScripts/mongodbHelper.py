@@ -2,6 +2,11 @@ import requests
 import pymongo
 from pymongo import MongoClient
 import pythonConfig as pc
+import json
+
+
+cluster = MongoClient(pc.mongoDB['client'])
+db = cluster["test"]
 
 
 def TestFunc():
@@ -27,5 +32,12 @@ def TestFunc():
         print(stockfeed[ss])
 
 
-if __name__ == '__main__':
-    TestFunc()
+def InsertNewDatabase(db):
+    with open('../DataSetSamples/CanadaSymbols_IEXCloud.json') as f:
+        data = json.load(f)
+
+    collection = db["Symbols_Canada"]
+    collection.insert_many(data)
+
+
+# InsertNewDatabase(db)

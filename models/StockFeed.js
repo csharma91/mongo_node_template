@@ -21,6 +21,11 @@ const StockfeedSchema = mongoose.Schema({
     type: String,
     required: true
   },
+
+  postTypeImage: {
+    type: String
+  },
+
   avatar: {
     type: String
   },
