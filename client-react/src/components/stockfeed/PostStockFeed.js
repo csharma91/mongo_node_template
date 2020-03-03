@@ -2,6 +2,8 @@ import React, { Component, Fragment } from "react";
 import PropTypes from "prop-types";
 import withStyles from "@material-ui/core/styles/withStyles";
 import MyButton from "../../util/MyButton";
+import QuillEditor from "./QuillEditor";
+
 // MUI Stuff
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
@@ -29,8 +31,20 @@ const styles = theme => ({
     position: "absolute",
     left: "91%",
     top: "6%"
+  },
+  dialogPaper: {
+    minHeight: "80vh",
+    maxHeight: "200vh"
   }
 });
+
+const onFilesChange = value => {
+  console.log(value);
+};
+
+const onEditorChange = files => {
+  console.log(files);
+};
 
 class PostStockFeed extends Component {
   state = {
@@ -57,9 +71,16 @@ class PostStockFeed extends Component {
     this.props.clearErrors();
     this.setState({ open: false, errors: {} });
   };
-  handleChange = event => {
+  handleChangeTitle = event => {
     this.setState({ [event.target.name]: event.target.value });
   };
+
+  handleChangeBody = event => {
+    // this.setState({ [event.target.name]: event.target.value });
+    this.setState({ body: event });
+    console.log(event);
+  };
+
   handleSubmit = event => {
     event.preventDefault();
     this.props.postStockfeed({
@@ -82,10 +103,11 @@ class PostStockFeed extends Component {
           <AddIcon />
         </MyButton>
         <Dialog
+          className={classes.dialogPaper}
           open={this.state.open}
           onClose={this.handleClose}
           fullWidth
-          maxWidth="sm"
+          maxWidth="m"
         >
           <MyButton
             tip="Close"
@@ -100,15 +122,22 @@ class PostStockFeed extends Component {
               <TextField
                 name="title"
                 type="text"
-                // label="SCREAM!!"
                 placeholder="Title"
                 error={errors.body ? true : false}
                 helperText={errors.body}
                 className={classes.textField}
-                onChange={this.handleChange}
+                onChange={this.handleChangeTitle}
                 fullWidth
               />
-              <TextField
+
+              <hr className={classes.invisibleSeperator} />
+              <QuillEditor
+                name="body"
+                placeholder={"Start Posting Something!"}
+                onEditorChange={this.handleChangeBody}
+                onFilesChange={onFilesChange}
+              />
+              {/* <TextField
                 name="body"
                 type="text"
                 // label="SCREAM!!"
@@ -120,7 +149,7 @@ class PostStockFeed extends Component {
                 className={classes.textField}
                 onChange={this.handleChange}
                 fullWidth
-              />
+              /> */}
 
               <Button
                 type="submit"

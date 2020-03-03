@@ -4,8 +4,10 @@ import pandas as pd
 # from requests_html import HTMLSession
 import re
 import json
-import bingSearch as search
+#import bingSearch as search
 import pickle
+
+#https://github.com/MatthewChatham/glassdoor-review-scraper
 
 headers = {'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
            'accept-encoding': 'gzip, deflate, sdch, br',
@@ -73,7 +75,9 @@ gdid = []
 spid = []
 
 
-url = 'https://www.glassdoor.com/Reviews/Microsoft-Reviews-E1651.htm'
+#https://www.glassdoor.ca/Reviews/Microsoft-Reviews-E1651.htm?sort.sortType=RD&sort.ascending=false
+
+url = 'https://www.glassdoor.com/Reviews/Microsoft-Reviews-E1651.htm' +'?sort.sortType=RD&sort.ascending=false'
 
 page = requests.post(url, headers=headers)
 soup = BeautifulSoup(page.text, "lxml")

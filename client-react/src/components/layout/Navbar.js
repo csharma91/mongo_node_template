@@ -24,9 +24,6 @@ export class Navbar extends Component {
           {authenticated ? (
             <Fragment>
               <PostStockFeed />
-              {/* <MyButton tip="Post a Note!">
-                <AddIcon />
-              </MyButton> */}
 
               <Link to="/">
                 <MyButton tip="Home">

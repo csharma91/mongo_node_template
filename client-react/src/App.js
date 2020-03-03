@@ -49,6 +49,18 @@ class App extends Component {
             <div className="container">
               <Switch>
                 <Route exact path="/" component={home} />
+                {/* <Route
+                  exact
+                  path="/editor"
+                  render={props => (
+                    <QuillEditor
+                      {...props}
+                      placeholder={"Start Posting Something!"}
+                      onEditorChange={onEditorChange}
+                      onFilesChange={onFilesChange}
+                    />
+                  )}
+                /> */}
                 <AuthRoute exact path="/login" component={login} />
                 <AuthRoute exact path="/signup" component={signup} />
               </Switch>

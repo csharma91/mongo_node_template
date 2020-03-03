@@ -1,0 +1,17 @@
+Feature List
+ - Add Company Search/ AutoComplete Functionality
+ - Breakdown by Tabs - StockTok; Glassdoor; Alerts, News
+ - Add Page for Company Search
+
+
+
+March 02
+- Fix Glassdoor Data API
+- Text Editor - Quill - Make sure posted data is rendered properly - watch tutorial on Quill
+
+
+March 03
+
+
+
+
