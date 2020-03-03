@@ -105,7 +105,9 @@ class StockfeedDialog extends Component {
             {dayjs(date).format("h:mm a, MMMM, DD YYYY")}
           </div>
           <hr className={classes.invisibleSeperator} />
-          <div className={classes.dialogContent}>{body}</div>
+          <div className={classes.dialogContent}>
+            <div dangerouslySetInnerHTML={{ __html: body }} />
+          </div>
           <hr className={classes.invisibleSeperator} />
 
           {/* <Typography

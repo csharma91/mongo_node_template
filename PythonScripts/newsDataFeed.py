@@ -4,8 +4,7 @@ import pythonConfig as pycon
 
 from pymongo import MongoClient
 
-cluster = MongoClient(
-    'mongodb+srv://chintan123:chintan123@contactkeeper-xtowj.mongodb.net/test?retryWrites=true&w=majority&ssl=true&ssl_cert_reqs=CERT_NONE')
+cluster = MongoClient(pycon.mongoDB['client'])
 db = cluster["test"]
 token = pycon.IEXCloud['token']
 tickers = ['SPOT', 'MSFT', 'AMZN', 'SHOP', 'FB', 'TSLA']

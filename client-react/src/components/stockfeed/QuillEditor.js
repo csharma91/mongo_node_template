@@ -406,6 +406,18 @@ class QuillEditor extends React.Component {
           <button className="ql-video" />
           <button className="ql-blockquote" />
           <button className="ql-clean" />
+
+          <button class="ql-list" value="ordered"></button>
+          <button class="ql-list" value="bullet"></button>
+          <button class="ql-indent" value="-1"></button>
+          <button class="ql-indent" value="+1"></button>
+          <button class="ql-formula"></button>
+
+          <select class="ql-color"></select>
+          <select class="ql-background"></select>
+
+          <select class="ql-font"></select>
+          <select class="ql-size"></select>
         </div>
         <ReactQuill
           ref={el => {
@@ -471,7 +483,14 @@ class QuillEditor extends React.Component {
     "code-block",
     "video",
     "blockquote",
-    "clean"
+    "clean",
+    "list",
+    "indent",
+    "formula",
+    "color",
+    "background",
+    "font",
+    "size"
   ];
 }
 

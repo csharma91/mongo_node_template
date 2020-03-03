@@ -56,7 +56,9 @@ const styles = theme => ({
     display: "block"
   },
   content: {
-    objectFit: "cover"
+    objectFit: "cover",
+    width: "670px",
+    minWidth: "130px"
   },
   title: {
     fontSize: 16,
@@ -74,10 +76,10 @@ const styles = theme => ({
   },
   periodtext: {
     fontSize: 12,
-    textAlign: "right",
-    marginTop: -20,
-    marginLeft: 600,
-    position: "absolute"
+    textAlign: "right"
+    //marginTop: -20,
+    //marginLeft: 600,
+    // position: "absolute"
   },
   bottomBar: {
     fontsize: 12
@@ -112,7 +114,11 @@ function IconContainer(props) {
 
 export class StockFeed extends Component {
   testFunc = body => {
-    return body.replace(/^(.{200}[^\s]*).*/, "$1") + " ....";
+    var body2 =
+      body +
+      "&nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp";
+    //return body2.substring(0, 500);
+    return body.replace(/^(.{200}[^\s]*).*/, "$1");
   };
 
   render() {
@@ -155,23 +161,27 @@ export class StockFeed extends Component {
         </div>
 
         <CardContent className={classes.content}>
-          <Typography variant="body2" className={classes.usertext}>
-            {author}
-          </Typography>
-          <Typography
-            variant="body2"
-            className={classes.periodtext}
-            color="textSecondary"
-          >
+          <span style={{ float: "left", fontSize: 12 }}>{author}</span>
+          <span style={{ float: "right", fontSize: 12 }}>
             <RelativeTime value={date} />
-          </Typography>
+          </span>
+          <hr style={{ border: "none", margin: "0 0 5px 0" }} />
+          {/* <span>
+            <Typography variant="body2" className={classes.usertext}>
+              {author}
+            </Typography>
+          </span>
+          <span>
+            <RelativeTime className={classes.periodtext} value={date} />
+          </span> */}
+
           <hr className={classes.invisibleSeperator} />
           <a className={classes.title} href={url} target="_blank">
             {companyTags} {" : "} {title}
           </a>
           <hr style={{ border: "none", margin: "0 0 5px 0" }} />
           <Typography variant="body2" className={classes.bodytext}>
-            {this.testFunc(body)}
+            <div dangerouslySetInnerHTML={{ __html: this.testFunc(body) }} />
           </Typography>
           <hr style={{ border: "none", margin: "0 0 5px 0" }} />
 
