@@ -1,3 +1,5 @@
+import random
+from random import randrange
 import pandas as pd
 import pymongo
 from pymongo import MongoClient
@@ -6,9 +8,10 @@ import json
 import requests
 
 
+# MongoDB
 cluster = MongoClient(pcon.mongoDB['client'])
 db = cluster["test"]
-
+# IEX
 token = pcon.IEXCloud['token']
 
 
@@ -32,6 +35,7 @@ def SnP500Companies(token):
                 logo = logos['url']
                 print('-' * 100)
                 print(counter)
+                counter += 1
                 d['logoURL'] = logo
                 print(d)
                 listOfComps.append(d)
@@ -39,4 +43,5 @@ def SnP500Companies(token):
     collection.insert_many(listOfComps)
 
 
-SnP500Companies(token)
+# Function Call
+# SnP500Companies(token)

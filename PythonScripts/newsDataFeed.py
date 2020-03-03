@@ -10,6 +10,27 @@ token = pycon.IEXCloud['token']
 tickers = ['SPOT', 'MSFT', 'AMZN', 'SHOP', 'FB', 'TSLA']
 
 
+def GetNewsFromRandomSec(token):
+    collection = db["SnP500Companies"]
+    newsFeed2 = db["NewsFeed_v2"]
+    counter = 0
+    tickers = []
+    for y in collection.find():
+        tickers.append(y['symbol'])
+    newTickers = tickers[tickers.index('J') + 1:]
+    for tick in newTickers:
+        if newTickers.index(tick) % 15 == 0:
+            try:
+                url = 'https://cloud.iexapis.com/v1/stock/{tick}/news/last/30?token={token}'.format(
+                    tick=tick, token=token)
+                response = requests.get(url)
+                news_articles = response.json()
+                newsFeed2.insert_many(news_articles)
+                print(news_articles)
+            except Exception:
+                pass
+
+
 def NewsAPIInsert(ticker, token):
     collection = db["newsarticles"]
     for tick in tickers:
@@ -57,7 +78,8 @@ def ModifyStockFeed(tickers, token):
         #     "$set": {'avatar': compLogo['url']}},{multi:True }))
 
 
-ModifyStockFeed(tickers, token)
+# Function Calls
+#ModifyStockFeed(tickers, token)
+#print(LogoInserts(tickers, token))
 
-
-# print(LogoInserts(tickers, token))
+# GetNewsFromRandomSec(token)

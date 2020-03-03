@@ -274,4 +274,4 @@ def InsertAlertsToStockfeed(userProfile):
 # print(posts)
 # stockfeed.insert_many(posts)
 # AddNewField(userProfile)
-stockfeed.insert_many(InsertAlertsToStockfeed(userProfile))
+# stockfeed.insert_many(InsertAlertsToStockfeed(userProfile))
