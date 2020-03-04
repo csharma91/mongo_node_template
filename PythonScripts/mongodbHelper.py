@@ -1,4 +1,5 @@
 import requests
+from bson.objectid import ObjectId
 import pymongo
 from pymongo import MongoClient
 import pythonConfig as pc
@@ -40,4 +41,21 @@ def InsertNewDatabase(db):
     collection.insert_many(data)
 
 
+def ConcatFields (db):
+    companies = db['SnP500Companies']
+    for c in companies.find({}):
+        print (c['_id'])
+        print (c['symbol'] +' '+ c['name'])
+        concat = (c['symbol'] +' '+ c['name'])
+
+        companies.update(
+            {"_id": ObjectId(c['_id'])},
+            {"$set": {'concat': concat
+
+            }}
+        )
+
+  
+
+#ConcatFields(db)
 # InsertNewDatabase(db)
