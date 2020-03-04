@@ -2,14 +2,17 @@ import React, { Component } from "react";
 import Grid from "@material-ui/core/Grid";
 import PropTypes from "prop-types";
 import withStyles from "@material-ui/core/styles/withStyles";
+import PostStockFeed from "../components/stockfeed/PostStockFeed";
 
 import StockFeed from "../components/stockfeed/StockFeed";
 import Profile from "../components/profile/Profile";
 import StockList from "../components/stockfeed/StockList";
+import PageTabs from "../components/layout/PageTabs";
 
 // MUI Stuff
 import Typography from "@material-ui/core/Typography";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import TextField from "@material-ui/core/TextField";
 
 //Redux Stuff
 import { connect } from "react-redux";
@@ -35,6 +38,16 @@ export class home extends Component {
     return (
       <Grid container spacing={3}>
         <Grid item sm={8} xs={12}>
+          <TextField
+            id="outlined"
+            variant="outlined"
+            label="Write a Post!"
+            fullWidth
+            component={PostStockFeed}
+          />
+          <hr style={{ border: "none", margin: "0 0 20px 0" }} />
+          <PageTabs />
+          <hr style={{ border: "none", margin: "0 0 20px 0" }} />
           {recentContactMarkUp}
         </Grid>
         <Grid item sm={4} xs={12}>

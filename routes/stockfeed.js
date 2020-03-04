@@ -17,9 +17,14 @@ const StockFeedLikes = require("../models/StockFeedLikes");
 
 router.get("/", auth, async (req, res) => {
   try {
-    const stockfeeds = await StockFeed.find({ user: req.user.id }).sort({
-      sentimentScore1: -1
-    });
+    const stockfeeds = await StockFeed.find({
+      user: req.user.id,
+      postType: "News"
+    })
+      .sort({
+        date: -1
+      })
+      .limit(50);
 
     res.json(stockfeeds);
   } catch (error) {

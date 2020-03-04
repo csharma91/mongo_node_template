@@ -38,8 +38,8 @@ const styles = theme => ({
     // minWidth: 200,
     // objectFit: "cover",
 
-    minWidth: 100,
-    height: 100,
+    width: "100px",
+    height: "100px",
     objectFit: "cover",
     // maxWidth: "100%",
     // borderRadius: "50%",
@@ -147,11 +147,8 @@ export class StockFeed extends Component {
     return (
       <Card className={classes.card}>
         <div>
-          <CardMedia
-            image={avatar}
-            title="Profile Pic"
-            className={classes.image}
-          />
+          <img src={avatar} title="Profile Pic" className={classes.image} />
+
           <hr className={classes.invisibleSeperator} />
           <img
             src={postTypeImage}

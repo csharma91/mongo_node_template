@@ -11,7 +11,6 @@ import Dialog from "@material-ui/core/Dialog";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import CircularProgress from "@material-ui/core/CircularProgress";
-import AddIcon from "@material-ui/icons/Add";
 import CloseIcon from "@material-ui/icons/Close";
 // Redux stuff
 import { connect } from "react-redux";
@@ -52,6 +51,7 @@ class PostStockFeed extends Component {
     body: "",
     title: "",
     name: "",
+    textBoxDisabled: false,
     errors: {}
   };
   componentWillReceiveProps(nextProps) {
@@ -66,6 +66,7 @@ class PostStockFeed extends Component {
   }
   handleOpen = () => {
     this.setState({ open: true });
+    this.setState({ textBoxDisabled: true });
   };
   handleClose = () => {
     this.props.clearErrors();
@@ -99,9 +100,17 @@ class PostStockFeed extends Component {
 
     return (
       <Fragment>
-        <MyButton onClick={this.handleOpen} tip="Post a Feed!">
+        <TextField
+          id="outlined"
+          variant="outlined"
+          label="Write a Post!"
+          fullWidth
+          onClick={this.handleOpen}
+          disabled={this.state.textBoxDisabled}
+        />
+        {/* <MyButton onClick={this.handleOpen} tip="Post a Feed!">
           <AddIcon />
-        </MyButton>
+        </MyButton> */}
         <Dialog
           className={classes.dialogPaper}
           open={this.state.open}

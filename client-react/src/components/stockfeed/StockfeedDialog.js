@@ -90,7 +90,7 @@ class StockfeedDialog extends Component {
       <CircularProgress size={200} />
     ) : (
       <Grid>
-        <Grid item sm={10}>
+        <Grid item sm={10} style={{ maxWidth: "100%" }}>
           <img
             src={articleImage}
             alt="Main Image"

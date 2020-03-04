@@ -30,6 +30,25 @@ userId = '5e556a19f78c3f2cbc6ae964'  # Morty
 userProfile = profile.find({"user": ObjectId(userId)})
 
 
+def AddDataToArray(profile):
+    userProfile = profile.find_one({"user": ObjectId(userId)})
+    newsfeedV2 = db['NewsFeed_v2'].distinct('related')
+    test = []
+    for a in newsfeedV2:
+        for b in (a.split(',')):
+            test.append(b)
+    relatedList = list(set(test))
+    print(relatedList)
+    profile.update(
+        {"user": ObjectId(userId)},
+        {'$set':{'stocks':relatedList
+
+        }}, 
+        multi = True
+    )
+ 
+
+
 def AddNewField(userProfile):
     posts = []
     stockfeed = db["stockfeeds"]
@@ -60,6 +79,42 @@ def AddNewField(userProfile):
         print(pt)
 
 
+def UpdateStockfeed():
+    posts =  []
+    news = db['NewsFeed_v2']
+    stockfeed = db["stockfeeds"]
+    results = news.find()
+    for result in results:
+        relatedComps = (result['related'].split(','))
+        logo = db['SnP500Companies'].find_one({'symbol':relatedComps[0]})['logoURL']
+        print (relatedComps[0])
+        print (logo)
+        if (result['lang'] == "en"):
+            ts = int(result['datetime'])/1000
+            posts.append({
+                "user": ObjectId(userId),
+                "author": result["source"],
+                "title": result["headline"],
+                "body": result["summary"],
+                "postType": "News",
+                "avatar": logo,
+                "url": result["url"],
+                "articleImage": result["image"],
+                "companyTags": relatedComps,
+                "sentimentScore1":100,
+                "sentimentScore2":0,
+                "sentimentScore3":0,
+                "sentimentType":'positive',
+                "date": datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S'),
+                "postTypeImage":'https://i.ya-webdesign.com/images/news-transparent-border-2.png'
+
+            })
+    
+    stockfeed.insert_many(posts)
+
+        
+
+
 def InsertNewsToStockfeed(userProfile):
 
     posts = []
@@ -72,7 +127,7 @@ def InsertNewsToStockfeed(userProfile):
             results = news.find({"related": tick})
             for result in results:
                 # Only look for posts in English
-                if (result['lang'] == "en" and ((len(result["summary"].split())) > 100)):
+                if (result['lang'] == "en"):
                     comp = [tick]
                     ts = int(result['datetime'])/1000
                     print(type(ts))
@@ -275,3 +330,5 @@ def InsertAlertsToStockfeed(userProfile):
 # stockfeed.insert_many(posts)
 # AddNewField(userProfile)
 # stockfeed.insert_many(InsertAlertsToStockfeed(userProfile))
+
+UpdateStockfeed()
