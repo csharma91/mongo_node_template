@@ -8,6 +8,7 @@ import StockFeed from "../components/stockfeed/StockFeed";
 import Profile from "../components/profile/Profile";
 import StockList from "../components/stockfeed/StockList";
 import PageTabs from "../components/layout/PageTabs";
+import CompanySearch from "../util/CompanySearch";
 
 // MUI Stuff
 import Typography from "@material-ui/core/Typography";
@@ -46,7 +47,8 @@ export class home extends Component {
             component={PostStockFeed}
           />
           <hr style={{ border: "none", margin: "0 0 20px 0" }} />
-          <PageTabs />
+          <CompanySearch />
+          {/* <PageTabs /> */}
           <hr style={{ border: "none", margin: "0 0 20px 0" }} />
           {recentContactMarkUp}
         </Grid>
