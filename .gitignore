@@ -4,3 +4,4 @@ node_modules
 /PythonScripts/pythonConfig
 PythonScripts/pythonConfig.py
 FlaskAPIs/flaskConfig.py
+PythonScripts/chromedriver.exe
