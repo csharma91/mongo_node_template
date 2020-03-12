@@ -11,9 +11,13 @@ function sleep(delay = 0) {
   });
 }
 
+// For multiple Entries
+//https://codesandbox.io/s/material-demo-tfpo4
+
 export default function CompanySearch() {
   const [open, setOpen] = React.useState(false);
   const [options, setOptions] = React.useState([]);
+  const [data, setData] = React.useState([]);
   const loading = open && options.length === 0;
 
   React.useEffect(() => {
@@ -25,13 +29,14 @@ export default function CompanySearch() {
 
     (async () => {
       const response = await fetch(
-        "https://country.register.gov.uk/records.json?page-size=5000"
+        "https://rocky-brook-15018.herokuapp.com/api/v2/compSearch?q="
       );
-      await sleep(1e3); // For demo purposes.
-      const countries = await response.json();
+      await sleep(1e1); // For demo purposes.
+      const result = await response.json();
+      const compList = result.result;
 
       if (active) {
-        setOptions(Object.keys(countries).map(key => countries[key].item[0]));
+        setOptions(Object.keys(compList).map(key => compList[key]));
       }
     })();
 
@@ -46,9 +51,12 @@ export default function CompanySearch() {
     }
   }, [open]);
 
+  console.log(options);
+
   return (
     <Autocomplete
       id="asynchronous-demo"
+      multiple
       style={{ width: 300 }}
       open={open}
       onOpen={() => {
@@ -57,14 +65,15 @@ export default function CompanySearch() {
       onClose={() => {
         setOpen(false);
       }}
-      getOptionSelected={(option, value) => option.name === value.name}
-      getOptionLabel={option => option.name}
+      getOptionSelected={(option, value) => option.symbol === value.symbol}
+      getOptionLabel={option => option.symbol + "\n" + option.name}
       options={options}
       loading={loading}
+      onChange={data => {}}
       renderInput={params => (
         <TextField
           {...params}
-          label="Asynchronous"
+          label="Select Company"
           variant="outlined"
           InputProps={{
             ...params.InputProps,
