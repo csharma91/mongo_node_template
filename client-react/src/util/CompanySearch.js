@@ -50,8 +50,7 @@ export default function CompanySearch() {
       setOptions([]);
     }
   }, [open]);
-
-  console.log(options);
+  console.log(data);
 
   return (
     <Autocomplete
@@ -66,10 +65,20 @@ export default function CompanySearch() {
         setOpen(false);
       }}
       getOptionSelected={(option, value) => option.symbol === value.symbol}
-      getOptionLabel={option => option.symbol + "\n" + option.name}
+      getOptionLabel={option => option.symbol}
       options={options}
       loading={loading}
-      onChange={data => {}}
+      onChange={(event, newValue) => {
+        setData(newValue);
+      }}
+      renderOption={option => (
+        <React.Fragment>
+          {option.symbol}
+          <br />
+
+          {option.name}
+        </React.Fragment>
+      )}
       renderInput={params => (
         <TextField
           {...params}
